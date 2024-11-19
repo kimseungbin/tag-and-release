@@ -26,4 +26,12 @@ describe('GitHub Action', () => {
 
 		expect(setFailed).toHaveBeenCalledWith('Input required and not supplied: name')
 	})
+
+	it('should fail when the name contains invalid characters', () => {
+		;(getInput as jest.Mock).mockReturnValue('GitHub@2024')
+
+		run()
+
+		expect(setFailed).toHaveBeenCalledWith('Name must contain only letters, numbers, underscores, and hyphens!')
+	})
 })
