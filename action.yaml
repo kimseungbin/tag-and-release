@@ -1,0 +1,10 @@
+name: Release Automation Action
+author: @kimseungbin
+description: Automates the release process using semantic versioning and GitHub Actions.
+inputs:
+  name:
+    description: 'abc'
+    required: true
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
