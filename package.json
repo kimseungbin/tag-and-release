@@ -29,6 +29,10 @@
     "name": "SeungBin Kim",
     "email": "luxorienskim@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimseungbin/tag-and-release.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.5.14",
