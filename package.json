@@ -4,6 +4,7 @@
   "description": "This repository demonstrates how to automate the release process using semantic versioning and GitHub Actions. It provides a simple and effective way to manage versioned releases, ensuring consistent version control and streamlined workflows. By leveraging a custom JavaScript GitHub Action, this project helps you automate the creation of GitHub Releases based on tagged versions.",
   "main": "dist/index.js",
   "scripts": {
+    "build:watch": "tsc -w",
     "test": "jest",
     "format:check": "prettier --check \"src/**/*.ts\"",
     "format:write": "prettier --write \"src/**/*.ts\""
