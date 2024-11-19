@@ -1,3 +1,4 @@
-path_filters:
-  exclude:
-    - '.run/**'
+reviews:
+  path_filters:
+    exclude:
+      - '.run/**'
