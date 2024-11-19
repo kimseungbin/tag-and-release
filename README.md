@@ -8,6 +8,11 @@ on tagged versions.
 
 # Features
 
+## Label Checker
+
+This application checks for the existence of specific labels (`major`, `minor`, and `patch`) on issues and pull requests
+and creates them if they do not exist.
+
 # Prerequisites
 
 # Installation
