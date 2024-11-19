@@ -1,0 +1,50 @@
+{
+  "name": "tag-and-release",
+  "version": "1.0.0",
+  "description": "This repository demonstrates how to automate the release process using semantic versioning and GitHub Actions. It provides a simple and effective way to manage versioned releases, ensuring consistent version control and streamlined workflows. By leveraging a custom JavaScript GitHub Action, this project helps you automate the creation of GitHub Releases based on tagged versions.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w",
+    "test": "jest",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "format:write": "prettier --write \"src/**/*.ts\""
+  },
+  "keywords": [
+    "semantic-versioning",
+    "github-actions",
+    "release-automation",
+    "version-control",
+    "javascript-action",
+    "github-releases",
+    "tagging",
+    "automated-releases",
+    "workflow",
+    "versioning"
+  ],
+  "homepage": "https://github.com/kimseungbin/tag-and-release",
+  "bugs": {
+    "url": "https://github.com/kimseungbin/tag-and-release/issues",
+    "email": "luxorienskim@gmail.com"
+  },
+  "author": {
+    "name": "SeungBin Kim",
+    "email": "luxorienskim@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimseungbin/tag-and-release.git"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.9.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.3",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1"
+  }
+}
