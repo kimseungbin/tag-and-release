@@ -13,6 +13,6 @@ export function run(): void {
 		const name = getInput('name', { required: true })
 		info(`Hello ${name}!`)
 	} catch (error) {
-		setFailed((error as Error).message)
+		setFailed(error instanceof Error ? error.message : 'An unknown error occurred')
 	}
 }
