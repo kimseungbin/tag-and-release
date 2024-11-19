@@ -11,6 +11,10 @@ import { getInput, info, setFailed } from '@actions/core'
 export function run(): void {
 	try {
 		const name = getInput('name', { required: true })
+
+		const re = /^[\w-]+$/
+		if (!re.test(name)) throw new Error('Name must contain only letters, numbers, underscores, and hyphens!')
+
 		info(`Hello ${name}!`)
 	} catch (error) {
 		setFailed(error instanceof Error ? error.message : 'An unknown error occurred')
