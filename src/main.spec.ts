@@ -8,9 +8,11 @@ jest.mock('@actions/core', () => ({
 }))
 
 describe('GitHub Action', () => {
-	it('logs a greeting with the provided name', () => {
+	it('should log a greeting with the provided name', () => {
 		;(getInput as jest.Mock).mockReturnValue('GitHub')
+
 		run()
+
 		expect(getInput).toHaveBeenCalledWith('name', { required: true })
 		expect(info).toHaveBeenCalledWith('Hello GitHub!')
 	})
