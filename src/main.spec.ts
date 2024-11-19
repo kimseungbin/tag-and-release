@@ -8,6 +8,12 @@ jest.mock('@actions/core', () => ({
 }))
 
 describe('GitHub Action', () => {
+	beforeEach(() => {
+		jest.clearAllMocks()
+		;(getInput as jest.Mock).mockReset()
+		;(setFailed as jest.Mock).mockReset()
+		;(info as jest.Mock).mockReset()
+	})
 	it('should log a greeting with the provided name', () => {
 		;(getInput as jest.Mock).mockReturnValue('GitHub')
 
