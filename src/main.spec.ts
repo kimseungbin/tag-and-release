@@ -1,5 +1,5 @@
 import { run } from './main'
-import { getInput, info } from '@actions/core'
+import { getInput, info, setFailed } from '@actions/core'
 
 jest.mock('@actions/core', () => ({
 	getInput: jest.fn(),
@@ -15,5 +15,15 @@ describe('GitHub Action', () => {
 
 		expect(getInput).toHaveBeenCalledWith('name', { required: true })
 		expect(info).toHaveBeenCalledWith('Hello GitHub!')
+	})
+
+	it('should fail when no name is provided', () => {
+		;(getInput as jest.Mock).mockImplementation(() => {
+			throw new Error('Input required and not supplied: name')
+		})
+
+		run()
+
+		expect(setFailed).toHaveBeenCalledWith('Input required and not supplied: name')
 	})
 })
