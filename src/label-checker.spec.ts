@@ -7,6 +7,10 @@ describe('Label Checker - GitHub Label Management', () => {
 	let labelChecker: LabelChecker
 
 	const labels = ['major', 'minor', 'patch']
+	const TEST_CONFIG = {
+		owner: 'kimseungbin',
+		repo: 'tag-and-release',
+	} as const
 
 	beforeEach(() => {
 		octokit = {
@@ -17,10 +21,7 @@ describe('Label Checker - GitHub Label Management', () => {
 				},
 			},
 		} as unknown as Octokit
-		const TEST_CONFIG = {
-			owner: 'kimseungbin',
-			repo: 'tag-and-release',
-		} as const
+
 		labelChecker = new LabelChecker(octokit, TEST_CONFIG.owner, TEST_CONFIG.repo)
 	})
 
@@ -49,14 +50,14 @@ describe('Label Checker - GitHub Label Management', () => {
 			await labelChecker.ensureLabelsExist()
 
 			expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({
-				owner: 'kimseungbin',
-				repo: 'tag-and-release',
+				owner: TEST_CONFIG.owner,
+				repo: TEST_CONFIG.repo,
 			})
 			expect(createLabelSpy).toHaveBeenCalledTimes(missingLabels.length)
 			missingLabels.forEach((label) => {
 				const expectedLabel = {
-					owner: 'kimseungbin',
-					repo: 'tag-and-release',
+					owner: TEST_CONFIG.owner,
+					repo: TEST_CONFIG.repo,
 					name: label,
 					description: `${label.charAt(0).toUpperCase() + label.slice(1)} version bump`,
 					color: label === 'major' ? 'ff0000' : label === 'minor' ? '00ff00' : '0000ff',
