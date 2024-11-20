@@ -11,7 +11,12 @@ export function validateColorCode(color: string): void {
 	}
 }
 
-// hexToRgb converts hex color code to RGB values
+/**
+ * Converts a hex color code to an RGB color object.
+ *
+ * @param {string} hex - The hex color code string (e.g., "FF0000").
+ * @return {Object} An object containing the RGB color values with properties `r`, `g`, and `b`.
+ */
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
 	const bigint = parseInt(hex, 16)
 	return {
@@ -39,7 +44,15 @@ function getLuminance(r: number, g: number, b: number): number {
 	return 0.2126 * rsrgb + 0.7152 * gsrgb + 0.0722 * bsrgb
 }
 
-// getContrastRatio calculates the contrast ratio between two colors
+// noinspection SpellCheckingInspection
+/**
+ * Calculates the contrast ratio between two colors provided in hexadecimal format according to WCAG 2.0.
+ *
+ * @param {string} foreground - The foreground color (6-character hex without #)
+ * @param {string} background - The background color (6-character hex without #)
+ * @return {number} The contrast ratio between the two colors.
+ * @see https://www.w3.org/TR/WCAG20/#contrast-ratiodef
+ */
 function getContrastRatio(foreground: string, background: string): number {
 	const fbRgb = hexToRgb(foreground)
 	const bbRgb = hexToRgb(background)
