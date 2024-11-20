@@ -33,16 +33,16 @@ export class LabelChecker {
 		this.octokit = octokit
 	}
 
-	static getLabelConfig(labelName: string): { name: string; description: string; color: string } | undefined {
+	static getLabelConfig(labelName: string): { name: string; description?: string; color: string } | undefined {
 		return LabelChecker.labels.find((label) => label.name === labelName)
 	}
 
 	private static validateLabelConfigs(configs: typeof labelConfigs): void {
 		const names = new Set<string>()
-		for (let config of configs) {
-			if (!config.name || !config.color || !config.description) {
-				throw new Error(`Invalid label config: ${JSON.stringify(config)}`)
-			}
+		for (const config of configs) {
+			if (!config.name) throw new Error('Label name is required')
+			if (!config.color) throw new Error(`Color is required for label "${config.name}"`)
+			if (!config.description) console.warn(`Description is missing for label "${config.name}"`)
 			if (names.has(config.name)) {
 				throw new Error(`Duplicate label name: ${config.name}`)
 			}

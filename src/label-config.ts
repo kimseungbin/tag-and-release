@@ -7,7 +7,7 @@ export interface LabelConfig {
 	/** The name of the label */
 	name: string
 	/** Description of what this label represents */
-	description: string
+	description?: string
 	/** Hex color code (without #) for the label */
 	color: string
 }
