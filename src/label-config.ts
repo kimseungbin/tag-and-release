@@ -1,3 +1,5 @@
+import { hasAccessibleContrast, validateColorCode } from './color-utils'
+
 /**
  * Configuration for version bump labels
  */
@@ -27,3 +29,27 @@ export const labelConfigs: LabelConfig[] = [
 		color: '0969da', // GitHub's default blue
 	},
 ]
+
+// noinspection SpellCheckingInspection
+const lightBackgroundColor = 'ffffff'
+const darkBackgroundColor = '0d1117'
+
+labelConfigs.forEach((label) => {
+	try {
+		validateColorCode(label.color)
+
+		if (!hasAccessibleContrast(label.color, lightBackgroundColor)) {
+			console.warn(
+				`The color ${label.color} for label "${label.name}" does not have sufficient contrast with the light background color ${lightBackgroundColor}!`,
+			)
+		}
+
+		if (!hasAccessibleContrast(label.color, darkBackgroundColor)) {
+			console.warn(
+				`The color ${label.color} for label "${label.name}" does not have sufficient contrast with the dark background color ${darkBackgroundColor}!`,
+			)
+		}
+	} catch (error: any) {
+		console.error(error.message)
+	}
+})
