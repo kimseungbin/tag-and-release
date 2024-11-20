@@ -1,12 +1,17 @@
 import { Octokit } from '@octokit/rest'
 
 import { labelConfigs } from './label-config'
+import { validateColorCode } from './color-utils'
 
 export class LabelChecker {
+	private static readonly labels = (() => {
+		LabelChecker.validateLabelConfigs(labelConfigs)
+		return labelConfigs
+	})()
+
 	private readonly owner: string
 	private readonly repo: string
 	private readonly octokit: Octokit
-	private static readonly labels = labelConfigs
 
 	constructor(octokit: Octokit, owner: string, repo: string) {
 		const trimmedOwner = owner?.trim()
@@ -30,6 +35,20 @@ export class LabelChecker {
 
 	static getLabelConfig(labelName: string): { name: string; description: string; color: string } | undefined {
 		return LabelChecker.labels.find((label) => label.name === labelName)
+	}
+
+	private static validateLabelConfigs(configs: typeof labelConfigs): void {
+		const names = new Set<string>()
+		for (let config of configs) {
+			if (!config.name || !config.color || !config.description) {
+				throw new Error(`Invalid label config: ${JSON.stringify(config)}`)
+			}
+			if (names.has(config.name)) {
+				throw new Error(`Duplicate label name: ${config.name}`)
+			}
+			names.add(config.name)
+			validateColorCode(config.color)
+		}
 	}
 
 	async ensureLabelsExist(): Promise<void> {
