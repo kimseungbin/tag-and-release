@@ -1,16 +1,22 @@
 import { LabelChecker } from './label-checker'
 import { Octokit } from '@octokit/rest'
-import { beforeEach, describe, expect, it, MockedObject, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('Label Checker - GitHub Label Management', () => {
 	let octokit: Octokit
 	let labelChecker: LabelChecker
 
 	const labels = ['major', 'minor', 'patch']
-	const TEST_CONFIG = {
+
+	interface TestConfig {
+		readonly owner: string
+		readonly repo: string
+	}
+
+	const TEST_CONFIG: TestConfig = {
 		owner: 'kimseungbin',
 		repo: 'tag-and-release',
-	} as const
+	}
 
 	beforeEach(() => {
 		octokit = new Octokit()
