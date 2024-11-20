@@ -39,21 +39,22 @@ export class LabelChecker {
 				repo: this.repo,
 			})
 
+			const labelsToCreate = this.labels.filter((label) => !existingLabelNames.includes(label.name))
+			if (labelsToCreate.length === 0) return
+
 			const existingLabelNames = existingLabels.data.map((label) => label.name)
 
 			await Promise.all(
-				this.labels
-					.filter((label) => !existingLabelNames.includes(label.name))
-					.map((label) => {
-						const { name, description, color } = label
-						return this.octokit.rest.issues.createLabel({
-							owner: this.owner,
-							repo: this.repo,
-							name,
-							description,
-							color,
-						})
-					}),
+				labelsToCreate.map((label) => {
+					const { name, description, color } = label
+					return this.octokit.rest.issues.createLabel({
+						owner: this.owner,
+						repo: this.repo,
+						name,
+						description,
+						color,
+					})
+				}),
 			)
 		} catch (error) {
 			console.error(error)
