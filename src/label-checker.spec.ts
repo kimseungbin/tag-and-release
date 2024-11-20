@@ -17,7 +17,11 @@ describe('Label Checker - GitHub Label Management', () => {
 				},
 			},
 		} as unknown as Octokit
-		labelChecker = new LabelChecker(octokit, 'kimseungbin', 'tag-and-release')
+		const TEST_CONFIG = {
+			owner: 'kimseungbin',
+			repo: 'tag-and-release',
+		} as const
+		labelChecker = new LabelChecker(octokit, TEST_CONFIG.owner, TEST_CONFIG.repo)
 	})
 
 	// Test cases for all 2^3 combinations of labels
@@ -61,5 +65,4 @@ describe('Label Checker - GitHub Label Management', () => {
 			})
 		},
 	)
-	it('should not create labels if all labels already exist')
 })
