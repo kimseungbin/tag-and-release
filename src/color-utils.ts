@@ -21,7 +21,15 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
 	}
 }
 
-// getLuminance calculates the relative luminance of a color
+/**
+ * Computes the relative luminance of a color given its red, green, and blue components.
+ *
+ * @param {number} r - The red component of the color, a value between 0 and 255.
+ * @param {number} g - The green component of the color, a value between 0 and 255.
+ * @param {number} b - The blue component of the color, a value between 0 and 255.
+ * @return {number} The relative luminance of the color as a value between 0 and 1.
+ * @see https://www.w3.org/TR/WCAG20/#relativeluminancedef
+ */
 function getLuminance(r: number, g: number, b: number): number {
 	// noinspection SpellCheckingInspection
 	const [rsrgb, gsrgb, bsrgb] = [r, g, b].map((v) => {
