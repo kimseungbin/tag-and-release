@@ -8,6 +8,27 @@ on tagged versions.
 
 # Features
 
+## Label Checker
+
+This application manages semantic versioning labels (`major`, `minor`, and `patch`) for issues and pull requests,
+automatically creating them if they don't exist. These labels are essential for determining version bumps and
+maintaining consistent release workflow. The checker is triggered when new issues are created or when labels are
+modified, ensuring consistent label management throughout the repository's lifecycle.
+
+### Default Label Configuration
+
+The following labels are automatically managed:
+
+| Label | Description           | Color   |
+|-------|-----------------------|---------|
+| major | Breaking Changes      | #FF0000 |
+| minor | New Features          | #00FF00 |
+| patch | Bug fixes and patches | #0000FF |
+
+### Usage
+
+The label checker runs automatically when tag-and-release action is ran.
+
 # Prerequisites
 
 # Installation
