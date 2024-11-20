@@ -1,21 +1,22 @@
 import { run } from './main'
 import { getInput, info, setFailed } from '@actions/core'
+import { vi } from 'vitest'
 
-jest.mock('@actions/core', () => ({
-	getInput: jest.fn(),
-	setFailed: jest.fn(),
-	info: jest.fn(),
+vi.mock('@actions/core', () => ({
+	getInput: vi.fn(),
+	setFailed: vi.fn(),
+	info: vi.fn(),
 }))
 
 describe('GitHub Action', () => {
 	beforeEach(() => {
-		jest.clearAllMocks()
-		;(getInput as jest.Mock).mockReset()
-		;(setFailed as jest.Mock).mockReset()
-		;(info as jest.Mock).mockReset()
+		vi.clearAllMocks()
+		vi.mocked(getInput).mockReset()
+		vi.mocked(setFailed).mockReset()
+		vi.mocked(info).mockReset()
 	})
 	it('should log a greeting with the provided name', () => {
-		;(getInput as jest.Mock).mockReturnValue('GitHub')
+		vi.mocked(getInput).mockReturnValue('GitHub')
 
 		run()
 
@@ -24,7 +25,7 @@ describe('GitHub Action', () => {
 	})
 
 	it('should fail when no name is provided', () => {
-		;(getInput as jest.Mock).mockImplementation(() => {
+		vi.mocked(getInput).mockImplementation(() => {
 			throw new Error('Input required and not supplied: name')
 		})
 
@@ -34,7 +35,7 @@ describe('GitHub Action', () => {
 	})
 
 	it('should fail when the name contains invalid characters', () => {
-		;(getInput as jest.Mock).mockReturnValue('GitHub@2024')
+		vi.mocked(getInput).mockReturnValue('GitHub@2024')
 
 		run()
 
