@@ -10,8 +10,9 @@ on tagged versions.
 
 ## Label Checker
 
-This application checks for the existence of specific labels (`major`, `minor`, and `patch`) on issues and pull requests
-and creates them if they do not exist.
+This application manages semantic versioning labels (`major`, `minor`, and `patch`) for issues and pull requests,
+automatically creating them if they don't exist. These labels are essential for determining version bumps and
+maintaining consistent release workflow.
 
 ### Default Label Configuration
 
