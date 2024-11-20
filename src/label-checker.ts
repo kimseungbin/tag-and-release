@@ -1,26 +1,12 @@
 import { Octokit } from '@octokit/rest'
 
+import { labelConfigs } from './label-config'
+
 export class LabelChecker {
 	private readonly owner: string
 	private readonly repo: string
 	private readonly octokit: Octokit
-	private static readonly labels: ReadonlyArray<{ name: string; description: string; color: string }> = [
-		{
-			name: 'major',
-			description: 'Major version bump',
-			color: 'ff0000',
-		},
-		{
-			name: 'minor',
-			description: 'Minor version bump',
-			color: '00ff00',
-		},
-		{
-			name: 'patch',
-			description: 'Patch version bump',
-			color: '0000ff',
-		},
-	]
+	private static readonly labels = labelConfigs
 
 	constructor(octokit: Octokit, owner: string, repo: string) {
 		const trimmedOwner = owner?.trim()
