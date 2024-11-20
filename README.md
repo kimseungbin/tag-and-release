@@ -26,10 +26,7 @@ The following labels are automatically managed:
 
 ### Usage
 
-The label checker runs automatically when:
-
-- A new issue is created a label is created, edited, or deleted.
-
+The label checker runs automatically when tag-and-release action is ran.
 # Prerequisites
 
 # Installation
