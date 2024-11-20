@@ -23,6 +23,10 @@ export class LabelChecker {
 	]
 
 	constructor(octokit: Octokit, owner: string, repo: string) {
+		if (!owner?.trim()) throw new Error('Owner is required')
+		if (!repo?.trim()) throw new Error('Repository name is required')
+		if (!octokit) throw new Error('Octokit instance is required')
+
 		this.owner = owner
 		this.repo = repo
 		this.octokit = octokit
