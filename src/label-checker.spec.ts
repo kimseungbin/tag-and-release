@@ -1,6 +1,6 @@
 import { LabelChecker } from './label-checker'
 import { Octokit } from '@octokit/rest'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, MockedObject, vi } from 'vitest'
 
 describe('Label Checker - GitHub Label Management', () => {
 	let octokit: Octokit
@@ -13,14 +13,10 @@ describe('Label Checker - GitHub Label Management', () => {
 	} as const
 
 	beforeEach(() => {
-		octokit = {
-			rest: {
-				issues: {
-					listLabelsForRepo: vi.fn(),
-					createLabel: vi.fn(),
-				},
-			},
-		} as unknown as Octokit
+		octokit = new Octokit()
+
+		octokit.rest.issues.listLabelsForRepo = vi.fn().mockResolvedValue({ data: [] }) as any
+		octokit.rest.issues.createLabel = vi.fn().mockResolvedValue({ data: {} }) as any
 
 		labelChecker = new LabelChecker(octokit, TEST_CONFIG.owner, TEST_CONFIG.repo)
 	})
@@ -64,4 +60,17 @@ describe('Label Checker - GitHub Label Management', () => {
 			})
 		},
 	)
+	it('should handle API errors gracefully', async () => {
+		vi.mocked(octokit.rest.issues.listLabelsForRepo).mockRejectedValue(new Error('API Error'))
+
+		await expect(labelChecker.ensureLabelsExist()).rejects.toThrow('Failed to check labels')
+	})
+	it('should handle rate limiting', async () => {
+		vi.mocked(octokit.rest.issues.listLabelsForRepo).mockRejectedValue({
+			status: 403,
+			message: 'API rate limit exceeded',
+		})
+
+		await expect(labelChecker.ensureLabelsExist()).rejects.toThrow('API rate limit exceeded')
+	})
 })
