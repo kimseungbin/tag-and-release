@@ -26,10 +26,14 @@ export class LabelChecker {
 		const trimmedOwner = owner?.trim()
 		const trimmedRepo = repo?.trim()
 		if (!trimmedOwner || !/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(trimmedOwner)) {
-			throw new Error('Invalid owner name. Must be a valid GitHub username.')
+			throw new Error(
+				'Invalid owner name. GitHub username must be between 1-39 characters, start with a letter/number, and can contain hyphens.',
+			)
 		}
 		if (!trimmedRepo || !/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,100}$/i.test(trimmedRepo)) {
-			throw new Error('Invalid repository name. Must be a valid GitHub repository name.')
+			throw new Error(
+				'Invalid repository name. Repository names must be between 1-100 characters, start with a letter/number, and can contain hyphens.',
+			)
 		}
 		if (!octokit) throw new Error('Octokit instance is required')
 
