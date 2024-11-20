@@ -6,6 +6,8 @@ describe('Label Checker - GitHub Label Management', () => {
 	let octokit: Octokit
 	let labelChecker: LabelChecker
 
+	const labels = ['major', 'minor', 'patch']
+
 	beforeEach(() => {
 		octokit = {
 			rest: {
@@ -18,38 +20,43 @@ describe('Label Checker - GitHub Label Management', () => {
 		labelChecker = new LabelChecker(octokit, 'owner', 'repo')
 	})
 
-	it('should create major, minor, and patch labels if they do not exist', async () => {
-		vi.mocked(octokit.rest.issues.listLabelsForRepo).mockResolvedValue({
-			// @ts-ignore
-			data: [{ name: 'existing-label' }],
-		})
+	// Test cases for all 2^3 combinations of labels
+	const combinations: [string[], string[]][] = [
+		[[], ['major', 'minor', 'patch']], // No labels exist
+		[['major'], ['minor', 'patch']], // 'major' exists
+		[['minor'], ['major', 'patch']], // 'minor' exists
+		[['patch'], ['major', 'minor']], // 'patch' exists
+		[['major', 'minor'], ['patch']], // 'major', 'minor' exist
+		[['major', 'patch'], ['minor']], // 'major', 'patch' exist
+		[['minor', 'patch'], ['major']], // 'minor', 'patch' exist
+		[['major', 'minor', 'patch'], []], // All labels exist
+	]
 
-		const createLabelSpy = vi.mocked(octokit.rest.issues.createLabel)
+	it.each(combinations)(
+		'should create missing labels when existing labels are: %j',
+		async (existingLabels, missingLabels) => {
+			vi.mocked(octokit.rest.issues.listLabelsForRepo).mockResolvedValue({
+				// @ts-ignore
+				data: existingLabels.map((label) => ({ name: label })),
+			})
 
-		await labelChecker.ensureLabelExist()
+			const createLabelSpy = vi.mocked(octokit.rest.issues.createLabel)
 
-		expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' })
-		expect(createLabelSpy).toHaveBeenCalledTimes(3)
-		expect(createLabelSpy).toHaveBeenCalledWith({
-			owner: 'owner',
-			repo: 'repo',
-			name: 'major',
-			description: 'Major version bump',
-			color: 'FF0000',
-		})
-		expect(createLabelSpy).toHaveBeenCalledWith({
-			owner: 'owner',
-			repo: 'repo',
-			name: 'minor',
-			description: 'Minor version bump',
-			color: '00FF00',
-		})
-		expect(createLabelSpy).toHaveBeenCalledWith({
-			owner: 'owner',
-			repo: 'repo',
-			name: 'patch',
-			description: 'Patch version bump',
-			color: '0000FF',
-		})
-	})
+			await labelChecker.ensureLabelExist()
+
+			expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' })
+			expect(createLabelSpy).toHaveBeenCalledTimes(missingLabels.length)
+			missingLabels.forEach((label) => {
+				const expectedLabel = {
+					owner: 'owner',
+					repo: 'repo',
+					name: label,
+					description: `${label.charAt(0).toUpperCase() + label.slice(1)} version bump`,
+					color: label === 'major' ? 'FF0000' : label === 'minor' ? '00FF00' : '0000FF',
+				}
+				expect(createLabelSpy).toHaveBeenCalledWith(expectedLabel)
+			})
+		},
+	)
+	it('should not create labels if all labels already exist')
 })
