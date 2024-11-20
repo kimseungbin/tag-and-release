@@ -32,7 +32,7 @@ export class LabelChecker {
 		this.octokit = octokit
 	}
 
-	async ensureLabelExist(): Promise<void> {
+	async ensureLabelsExist(): Promise<void> {
 		try {
 			const existingLabels = await this.octokit.rest.issues.listLabelsForRepo({
 				owner: this.owner,

@@ -42,7 +42,7 @@ describe('Label Checker - GitHub Label Management', () => {
 
 			const createLabelSpy = vi.mocked(octokit.rest.issues.createLabel)
 
-			await labelChecker.ensureLabelExist()
+			await labelChecker.ensureLabelsExist()
 
 			expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({
 				owner: 'kimseungbin',
