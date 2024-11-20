@@ -39,10 +39,10 @@ export class LabelChecker {
 				repo: this.repo,
 			})
 
+			const existingLabelNames = existingLabels.data.map((label) => label.name)
+
 			const labelsToCreate = this.labels.filter((label) => !existingLabelNames.includes(label.name))
 			if (labelsToCreate.length === 0) return
-
-			const existingLabelNames = existingLabels.data.map((label) => label.name)
 
 			await Promise.all(
 				labelsToCreate.map((label) => {
