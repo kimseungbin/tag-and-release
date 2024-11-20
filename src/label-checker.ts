@@ -8,17 +8,17 @@ export class LabelChecker {
 		{
 			name: 'major',
 			description: 'Major version bump',
-			color: 'FF0000',
+			color: 'ff0000',
 		},
 		{
 			name: 'minor',
 			description: 'Minor version bump',
-			color: '00FF00',
+			color: '00ff00',
 		},
 		{
 			name: 'patch',
 			description: 'Patch version bump',
-			color: '0000FF',
+			color: '0000ff',
 		},
 	]
 

@@ -55,7 +55,7 @@ describe('Label Checker - GitHub Label Management', () => {
 					repo: 'tag-and-release',
 					name: label,
 					description: `${label.charAt(0).toUpperCase() + label.slice(1)} version bump`,
-					color: label === 'major' ? 'FF0000' : label === 'minor' ? '00FF00' : '0000FF',
+					color: label === 'major' ? 'ff0000' : label === 'minor' ? '00ff00' : '0000ff',
 				}
 				expect(createLabelSpy).toHaveBeenCalledWith(expectedLabel)
 			})
