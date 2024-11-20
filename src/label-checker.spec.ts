@@ -6,8 +6,6 @@ describe('Label Checker - GitHub Label Management', () => {
 	let octokit: Octokit
 	let labelChecker: LabelChecker
 
-	const labels = ['major', 'minor', 'patch']
-
 	interface TestConfig {
 		readonly owner: string
 		readonly repo: string
