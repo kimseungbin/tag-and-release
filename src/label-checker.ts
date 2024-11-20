@@ -23,12 +23,18 @@ export class LabelChecker {
 	]
 
 	constructor(octokit: Octokit, owner: string, repo: string) {
-		if (!owner?.trim()) throw new Error('Owner is required')
-		if (!repo?.trim()) throw new Error('Repository name is required')
+		const trimmedOwner = owner?.trim()
+		const trimmedRepo = repo?.trim()
+		if (!trimmedOwner || !/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(trimmedOwner)) {
+			throw new Error('Invalid owner name. Must be a valid GitHub username.')
+		}
+		if (!trimmedRepo || !/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,100}$/i.test(trimmedRepo)) {
+			throw new Error('Invalid repository name. Must be a valid GitHub repository name.')
+		}
 		if (!octokit) throw new Error('Octokit instance is required')
 
-		this.owner = owner
-		this.repo = repo
+		this.owner = trimmedOwner
+		this.repo = trimmedRepo
 		this.octokit = octokit
 	}
 
