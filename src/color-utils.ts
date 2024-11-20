@@ -53,7 +53,14 @@ function getContrastRatio(foreground: string, background: string): number {
 	return (lighter + 0.05) / (darker + 0.05)
 }
 
-// hasAccessibleContrast checks color contrast for accessibility based on WCAG AA standards
+/**
+ * Checks if the contrast between the foreground and background color meets
+ * the accessible contrast ratio threshold.
+ *
+ * @param {string} foreground - The color code of the foreground in hexadecimal format.
+ * @param {string} background - The color code of the background in hexadecimal format.
+ * @return {boolean} True if the contrast ratio is sufficient for accessibility standards, false otherwise.
+ */
 export function hasAccessibleContrast(foreground: string, background: string): boolean {
 	const MINIMUM_CONTRAST = 4.5
 
