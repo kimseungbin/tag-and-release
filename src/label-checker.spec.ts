@@ -17,7 +17,7 @@ describe('Label Checker - GitHub Label Management', () => {
 				},
 			},
 		} as unknown as Octokit
-		labelChecker = new LabelChecker(octokit, 'owner', 'repo')
+		labelChecker = new LabelChecker(octokit, 'kimseungbin', 'tag-and-release')
 	})
 
 	// Test cases for all 2^3 combinations of labels
@@ -44,12 +44,15 @@ describe('Label Checker - GitHub Label Management', () => {
 
 			await labelChecker.ensureLabelExist()
 
-			expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' })
+			expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({
+				owner: 'kimseungbin',
+				repo: 'tag-and-release',
+			})
 			expect(createLabelSpy).toHaveBeenCalledTimes(missingLabels.length)
 			missingLabels.forEach((label) => {
 				const expectedLabel = {
-					owner: 'owner',
-					repo: 'repo',
+					owner: 'kimseungbin',
+					repo: 'tag-and-release',
 					name: label,
 					description: `${label.charAt(0).toUpperCase() + label.slice(1)} version bump`,
 					color: label === 'major' ? 'FF0000' : label === 'minor' ? '00FF00' : '0000FF',
