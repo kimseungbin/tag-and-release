@@ -48,5 +48,6 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@octokit/rest": "^21.0.2"
-  }
+  },
+  "type": "module"
 }
