@@ -70,7 +70,10 @@ export class LabelChecker {
 					})
 				}),
 			)
-		} catch (error) {
+		} catch (error: any) {
+			if (error.status === 403 && error.message.includes('API rate limit exceeded')) {
+				throw new Error('API rate limit exceeded')
+			}
 			console.error(error)
 			throw new Error('Failed to check labels')
 		}
