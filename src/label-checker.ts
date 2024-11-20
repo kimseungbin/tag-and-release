@@ -4,7 +4,7 @@ export class LabelChecker {
 	private readonly owner: string
 	private readonly repo: string
 	private readonly octokit: Octokit
-	private readonly labels: ReadonlyArray<{ name: string; description: string; color: string }> = [
+	private static readonly labels: ReadonlyArray<{ name: string; description: string; color: string }> = [
 		{
 			name: 'major',
 			description: 'Major version bump',
@@ -38,6 +38,10 @@ export class LabelChecker {
 		this.octokit = octokit
 	}
 
+	static getLabelConfig(labelName: string): { name: string; description: string; color: string } | undefined {
+		return this.labels.find((label) => label.name === labelName)
+	}
+
 	async ensureLabelsExist(): Promise<void> {
 		try {
 			const existingLabels = await this.octokit.rest.issues.listLabelsForRepo({
@@ -47,7 +51,7 @@ export class LabelChecker {
 
 			const existingLabelNames = existingLabels.data.map((label) => label.name)
 
-			const labelsToCreate = this.labels.filter((label) => !existingLabelNames.includes(label.name))
+			const labelsToCreate = LabelChecker.labels.filter((label) => !existingLabelNames.includes(label.name))
 			if (labelsToCreate.length === 0) return
 
 			await Promise.all(

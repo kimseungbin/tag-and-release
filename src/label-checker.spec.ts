@@ -58,9 +58,7 @@ describe('Label Checker - GitHub Label Management', () => {
 				const expectedLabel = {
 					owner: TEST_CONFIG.owner,
 					repo: TEST_CONFIG.repo,
-					name: label,
-					description: `${label.charAt(0).toUpperCase() + label.slice(1)} version bump`,
-					color: label === 'major' ? 'ff0000' : label === 'minor' ? '00ff00' : '0000ff',
+					...LabelChecker.getLabelConfig(label),
 				}
 				expect(createLabelSpy).toHaveBeenCalledWith(expectedLabel)
 			})
