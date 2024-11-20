@@ -1,4 +1,4 @@
-// isHexColorCode is a type guard to check if a string is a valid 6-character hex color code
+// isHexColorCode is a type guard to check if a string is a valid 6-character hex color code without #
 export function isHexColorCode(color: string): color is string {
 	const re = /^[0-9A-Fa-f]{6}$/
 	return re.test(color)
