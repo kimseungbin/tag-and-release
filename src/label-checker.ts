@@ -43,7 +43,7 @@ export class LabelChecker {
 	}
 
 	static getLabelConfig(labelName: string): { name: string; description: string; color: string } | undefined {
-		return this.labels.find((label) => label.name === labelName)
+		return LabelChecker.labels.find((label) => label.name === labelName)
 	}
 
 	async ensureLabelsExist(): Promise<void> {
