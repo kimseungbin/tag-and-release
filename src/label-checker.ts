@@ -3,8 +3,8 @@ import { Octokit } from '@octokit/rest'
 export class LabelChecker {
 	private readonly owner: string
 	private readonly repo: string
-	private octokit: Octokit
-	private labels = [
+	private readonly octokit: Octokit
+	private readonly labels = [
 		{
 			name: 'major',
 			description: 'Major version bump',
