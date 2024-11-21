@@ -20,6 +20,12 @@ vi.mock('@octokit/rest', () => {
 					listLabelsForRepo: vi.fn(),
 					createLabel: vi.fn(),
 					updateLabel: vi.fn(),
+					addLabels: vi.fn(),
+					get: vi.fn(),
+				},
+				pulls: {
+					get: vi.fn(),
+					update: vi.fn(),
 				},
 			},
 		})),
