@@ -11,8 +11,8 @@ jobs:
   label-check:
     runs-on: ubuntu-latest
     outputs:
-      status: ${{ steps.label-check.outputs.status }}
-      error: ${{ steps.label-check.outputs.error }}
+      status: ${{ steps.test-local-action.outputs.status }}
+      error: ${{ steps.test-local-action.outputs.error }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,6 +26,7 @@ jobs:
       - name: Build
         run: npm run package
       - name: Test Local Action
+        id: test-local-action
         uses: ./
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
