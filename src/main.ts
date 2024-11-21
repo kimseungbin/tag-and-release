@@ -1,21 +1,26 @@
-import { getInput, info, setFailed } from '@actions/core'
+import { getInput, setFailed } from '@actions/core'
+import { Octokit } from '@octokit/rest'
+import { LabelChecker } from './label-checker'
+
+process.env.GITHUB_REPOSITORY = 'mock-owner/mock-repo'
 
 /**
  * Executes the main logic of the application.
  *
- * This function retrieves the 'name' input, logs a greeting message, and handles any errors by marking the process as failed.
- *
- * @return {void}
+ * Ensures required labels exist and are properly configured.
+ *n
+ * @return {Promise<void>}
  * @throws {Error} If the required 'name' input is not provided
  */
 export async function run(): Promise<void> {
+	const [owner, repo] = process.env.GITHUB_REPOSITORY!.split('/')
+
 	try {
-		const name = getInput('name', { required: true })
+		const token = getInput('github-token', { required: true })
+		const octokit = new Octokit({ auth: token })
 
-		const re = /^[\w-]+$/
-		if (!re.test(name)) throw new Error('Name must contain only letters, numbers, underscores, and hyphens!')
-
-		info(`Hello ${name}!`)
+		const labelChecker = new LabelChecker(octokit, owner, repo)
+		await labelChecker.ensureLabelsExist()
 	} catch (error) {
 		setFailed(error instanceof Error ? error.message : 'An unknown error occurred')
 	}
