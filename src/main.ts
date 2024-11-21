@@ -22,8 +22,7 @@ export async function run(): Promise<void> {
 	if (!owner || !repo) throw new Error('GITHUB_REPOSITORY is not in the expected format "owner/repo"')
 
 	try {
-		const token = getInput('github-token', { required: true })
-		const octokit = new Octokit({ auth: token })
+		const octokit: Octokit = await createGitHubClient()
 
 		const labelChecker = new LabelChecker(octokit, owner, repo)
 		await labelChecker.ensureLabelsExist()
@@ -35,4 +34,12 @@ export async function run(): Promise<void> {
 		} else if (error instanceof Error) setFailed(error.message)
 		else setFailed('An unknown error occurred')
 	}
+}
+
+/**
+ *
+ */
+async function createGitHubClient(): Promise<Octokit> {
+	const token = getInput('github-token', { required: true })
+	return new Octokit({ auth: token })
 }
