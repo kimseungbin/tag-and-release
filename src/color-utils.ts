@@ -12,7 +12,12 @@ export function isHexColorCode(color: string): color is string {
 	return re.test(color)
 }
 
-// validateColorCode validates color code using the type guard
+/**
+ * Validates a given color code to ensure it is a 6-character hex code without the '#' prefix.
+ *
+ * @param {string} color - The color code to validate.
+ * @return {void} - This function does not return a value, but it throws an error if the color code is invalid.
+ */
 export function validateColorCode(color: string): void {
 	if (!isHexColorCode(color)) {
 		throw new Error(`Invalid color code: ${color}. It must be a 6-character hex code without #.`)
