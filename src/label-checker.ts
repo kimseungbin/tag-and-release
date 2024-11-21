@@ -1,26 +1,21 @@
 import { Octokit } from '@octokit/rest'
 
+import { labelConfigs } from './label-config'
+import { validateColorCode } from './color-utils'
+
 export class LabelChecker {
+	private static readonly labels = (() => {
+		try {
+			LabelChecker.validateLabelConfigs(labelConfigs)
+			return labelConfigs
+		} catch (error: any) {
+			throw new Error(`Failed to initialize label configurations: ${error.message}`, { cause: error })
+		}
+	})()
+
 	private readonly owner: string
 	private readonly repo: string
 	private readonly octokit: Octokit
-	private static readonly labels: ReadonlyArray<{ name: string; description: string; color: string }> = [
-		{
-			name: 'major',
-			description: 'Major version bump',
-			color: 'ff0000',
-		},
-		{
-			name: 'minor',
-			description: 'Minor version bump',
-			color: '00ff00',
-		},
-		{
-			name: 'patch',
-			description: 'Patch version bump',
-			color: '0000ff',
-		},
-	]
 
 	constructor(octokit: Octokit, owner: string, repo: string) {
 		const trimmedOwner = owner?.trim()
@@ -42,8 +37,22 @@ export class LabelChecker {
 		this.octokit = octokit
 	}
 
-	static getLabelConfig(labelName: string): { name: string; description: string; color: string } | undefined {
+	static getLabelConfig(labelName: string): { name: string; description?: string; color: string } | undefined {
 		return LabelChecker.labels.find((label) => label.name === labelName)
+	}
+
+	private static validateLabelConfigs(configs: typeof labelConfigs): void {
+		const names = new Set<string>()
+		for (const config of configs) {
+			if (!config.name) throw new Error('Label name is required')
+			if (!config.color) throw new Error(`Color is required for label "${config.name}"`)
+			if (!config.description) console.warn(`Description is missing for label "${config.name}"`)
+			if (names.has(config.name)) {
+				throw new Error(`Duplicate label name: ${config.name}`)
+			}
+			names.add(config.name)
+			validateColorCode(config.color)
+		}
 	}
 
 	async ensureLabelsExist(): Promise<void> {

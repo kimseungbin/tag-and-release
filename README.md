@@ -19,11 +19,11 @@ modified, ensuring consistent label management throughout the repository's lifec
 
 The following labels are automatically managed:
 
-| Label | Description           | Color   |
-|-------|-----------------------|---------|
-| major | Breaking Changes      | #FF0000 |
-| minor | New Features          | #00FF00 |
-| patch | Bug fixes and patches | #0000FF |
+| Label | Description           | Color                                       |
+|-------|-----------------------|---------------------------------------------|
+| major | Breaking Changes      | <span style="color:#d73a4a;">#d73a4a</span> |
+| minor | New Features          | <span style="color:#2ea44f;">#2ea44f</span> |
+| patch | Bug fixes and patches | <span style="color:#0969da;">#0969da</span> |
 
 ### Usage
 
