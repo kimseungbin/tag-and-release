@@ -4,10 +4,10 @@ on:
     types: [ opened, unlabeled ]
   pull_request:
     types: [ opened, unlabeled ]
+permissions:
+  issues: write
+  pull-requests: write
 jobs:
-  permissions:
-    issues: write
-    pull-requests: write
   label-check:
     runs-on: ubuntu-latest
     steps:
