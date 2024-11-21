@@ -15,41 +15,49 @@ export interface LabelConfig {
 	color: HexColor
 }
 
-export const labelConfigs: LabelConfig[] = [
+const GITHUB_COLORS = {
+	RED: 'd73a4a' as HexColor,
+	GREEN: '2ea44f' as HexColor,
+	BLUE: '0969da' as HexColor,
+} as const
+
+export const labelConfigs: readonly LabelConfig[] = [
 	{
 		name: 'major',
 		description: 'Major version bump',
-		color: 'd73a4a' as HexColor, // GitHub's default red
+		color: GITHUB_COLORS.RED, // GitHub's default red
 	},
 	{
 		name: 'minor',
 		description: 'Minor version bump',
-		color: '2ea44f' as HexColor, // GitHub's default green
+		color: GITHUB_COLORS.GREEN, // GitHub's default green
 	},
 	{
 		name: 'patch',
 		description: 'Patch version bump',
-		color: '0969da' as HexColor, // GitHub's default blue
+		color: GITHUB_COLORS.BLUE, // GitHub's default blue
 	},
 ]
 
 // noinspection SpellCheckingInspection
-const lightBackgroundColor = 'ffffff'
-const darkBackgroundColor = '0d1117'
+/** GitHub's light theme background color */
+const LIGHT_BACKGROUND_COLOR = 'ffffff'
+/** GitHub's dark theme background color */
+const DARK_BACKGROUND_COLOR = '0d1117'
 
 labelConfigs.forEach((label) => {
 	try {
 		validateColorCode(label.color)
 
-		if (!hasAccessibleContrast(label.color, lightBackgroundColor)) {
+		if (!hasAccessibleContrast(label.color, LIGHT_BACKGROUND_COLOR)) {
 			console.warn(
-				`The color ${label.color} for label "${label.name}" does not have sufficient contrast with the light background color ${lightBackgroundColor}!`,
+				`The color ${label.color} for label "${label.name}" does not have sufficient contrast with the light background color ${LIGHT_BACKGROUND_COLOR}!`,
 			)
 		}
 
-		if (!hasAccessibleContrast(label.color, darkBackgroundColor)) {
+		if (!hasAccessibleContrast(label.color, DARK_BACKGROUND_COLOR)) {
 			console.warn(
-				`The color ${label.color} for label "${label.name}" does not have sufficient contrast with the dark background color ${darkBackgroundColor}!`,
+				`The color ${label.color} for label "${label.name}" does not have sufficient contrast with the dark background color ${DARK_BACKGROUND_COLOR}!`,
 			)
 		}
 	} catch (error: any) {
