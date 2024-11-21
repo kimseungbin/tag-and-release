@@ -1,0 +1,8 @@
+name: Tag and Release
+on:
+  - issues
+  - pull_request
+jobs:
+  label-check:
+    runs-on: ubuntu-latest
+    steps: kimseungbin/tag-and-release@v1
