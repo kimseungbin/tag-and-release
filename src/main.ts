@@ -1,6 +1,7 @@
 import { getInput, setFailed } from '@actions/core'
 import { Octokit } from '@octokit/rest'
 import { LabelChecker } from './label-checker'
+import { RequestError } from '@octokit/request-error'
 
 /**
  * Executes the main logic of the application.
@@ -23,6 +24,11 @@ export async function run(): Promise<void> {
 		const labelChecker = new LabelChecker(octokit, owner, repo)
 		await labelChecker.ensureLabelsExist()
 	} catch (error) {
-		setFailed(error instanceof Error ? error.message : 'An unknown error occurred')
+		if (error instanceof RequestError) {
+			if (error.status === 401) setFailed('Authentication failed. Please check your github-token')
+			else if (error.status === 403) setFailed('API rate limit exceeded or insufficient permissions.')
+			else setFailed(`GitHub API error: ${error.message}`)
+		} else if (error instanceof Error) setFailed(error.message)
+		else setFailed('An unknown error occurred')
 	}
 }
