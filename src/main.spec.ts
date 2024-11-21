@@ -15,6 +15,13 @@ vi.mock('@octokit/rest', () => {
 	return {
 		Octokit: vi.fn().mockImplementation(() => ({
 			auth: vi.fn(),
+			rest: {
+				issues: {
+					listLabelsForRepo: vi.fn(),
+					createLabel: vi.fn(),
+					updateLabel: vi.fn(),
+				},
+			},
 		})),
 	}
 })
