@@ -5,8 +5,13 @@ import { validateColorCode } from './color-utils'
 
 export class LabelChecker {
 	private static readonly labels = (() => {
-		LabelChecker.validateLabelConfigs(labelConfigs)
-		return labelConfigs
+		try {
+			LabelChecker.validateLabelConfigs(labelConfigs)
+			return labelConfigs
+		} catch (error) {
+			console.error('Failed to validate label configs:', error)
+			throw error
+		}
 	})()
 
 	private readonly owner: string
