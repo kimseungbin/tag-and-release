@@ -1,6 +1,9 @@
 import { run } from './main'
 import { getInput, info, setFailed } from '@actions/core'
+import { Octokit } from '@octokit/rest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+process.env.GITHUB_REPOSITORY = 'mock-owner/mock-repo'
 
 vi.mock('@actions/core', () => ({
 	getInput: vi.fn(),
@@ -8,37 +11,57 @@ vi.mock('@actions/core', () => ({
 	info: vi.fn(),
 }))
 
-describe('GitHub Action', () => {
+vi.mock('@octokit/rest', () => {
+	return {
+		Octokit: vi.fn().mockImplementation(() => ({
+			auth: vi.fn(),
+			rest: {
+				issues: {
+					listLabelsForRepo: vi.fn(),
+					createLabel: vi.fn(),
+					updateLabel: vi.fn(),
+					addLabels: vi.fn(),
+					get: vi.fn(),
+				},
+				pulls: {
+					get: vi.fn(),
+					update: vi.fn(),
+				},
+			},
+		})),
+	}
+})
+
+describe('run', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
 		vi.mocked(getInput).mockReset()
 		vi.mocked(setFailed).mockReset()
 		vi.mocked(info).mockReset()
-	})
-	it('should log a greeting with the provided name', () => {
-		vi.mocked(getInput).mockReturnValue('GitHub')
-
-		run()
-
-		expect(getInput).toHaveBeenCalledWith('name', { required: true })
-		expect(info).toHaveBeenCalledWith('Hello GitHub!')
+		vi.mocked(Octokit).mockClear()
 	})
 
-	it('should fail when no name is provided', () => {
+	it('should call getInput with correct arguments', async () => {
+		await run()
+		expect(getInput).toHaveBeenCalledWith('github-token', { required: true })
+	})
+
+	it('should call setFailed if getInput throws an error', async () => {
+		const errorMessage = 'An error occurred'
 		vi.mocked(getInput).mockImplementation(() => {
-			throw new Error('Input required and not supplied: name')
+			throw new Error(errorMessage)
 		})
 
-		run()
-
-		expect(setFailed).toHaveBeenCalledWith('Input required and not supplied: name')
+		await run()
+		expect(setFailed).toHaveBeenCalledWith(errorMessage)
 	})
 
-	it('should fail when the name contains invalid characters', () => {
-		vi.mocked(getInput).mockReturnValue('GitHub@2024')
+	it('should call setFailed with a generic message if an unknown error occurs', async () => {
+		vi.mocked(getInput).mockImplementation(() => {
+			throw 'Unknown error'
+		})
 
-		run()
-
-		expect(setFailed).toHaveBeenCalledWith('Name must contain only letters, numbers, underscores, and hyphens!')
+		await run()
+		expect(setFailed).toHaveBeenCalledWith('An unknown error occurred')
 	})
 })

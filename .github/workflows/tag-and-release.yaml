@@ -1,0 +1,32 @@
+name: Tag and Release
+on:
+  issues:
+    types: [ opened, unlabeled ]
+  pull_request:
+    types: [ opened, unlabeled ]
+permissions:
+  issues: write
+  pull-requests: write
+jobs:
+  label-check:
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.test-local-action.outputs.status }}
+      error: ${{ steps.test-local-action.outputs.error }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run package
+      - name: Test Local Action
+        id: test-local-action
+        uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

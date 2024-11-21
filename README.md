@@ -10,10 +10,15 @@ on tagged versions.
 
 ## Label Checker
 
-This application manages semantic versioning labels (`major`, `minor`, and `patch`) for issues and pull requests,
-automatically creating them if they don't exist. These labels are essential for determining version bumps and
-maintaining consistent release workflow. The checker is triggered when new issues are created or when labels are
-modified, ensuring consistent label management throughout the repository's lifecycle.
+This application will manage semantic versioning labels (`major`, `minor`, and `patch`) for issues and pull requests.
+These labels are essential for determining version bumps and maintaining consistent release workflow.
+
+Planned features include:
+
+- Automatic label creation and management
+- Integration with issue and PR creation events
+- Support for label modifications
+- Externalized label configurations
 
 ### Default Label Configuration
 
@@ -27,7 +32,23 @@ The following labels are automatically managed:
 
 ### Usage
 
-The label checker runs automatically when tag-and-release action is ran.
+Note: Automatic label checking is currently under development. Please refer to issue #7 for implementation status and
+planned features.
+The label checker runs automatically when tag-and-release action is run.
+
+# Tools used
+
+## Vite
+
+- Why Vite was chosen
+- How it's configured in the project
+- Its role in the build process
+
+## Vitest
+
+Used Vitest instead of Jest for out-of-box TypeScript support.
+Jest alone can't handle dependencies like octokit and even with ts-jest, it required additional configurations.
+Whereas Vitest can run tests without any specific configurations.
 
 # Prerequisites
 
