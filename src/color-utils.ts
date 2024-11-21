@@ -62,6 +62,8 @@ function getLuminance(r: number, g: number, b: number): number {
  * @see https://www.w3.org/TR/WCAG20/#contrast-ratiodef
  */
 function getContrastRatio(foreground: string, background: string): number {
+	validateColorCode(foreground)
+	validateColorCode(background)
 	const fbRgb = hexToRgb(foreground)
 	const bbRgb = hexToRgb(background)
 
