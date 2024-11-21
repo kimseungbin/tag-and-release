@@ -16,10 +16,14 @@ import { RequestError } from '@octokit/request-error'
  */
 export async function run(): Promise<void> {
 	const repoPath = process.env.GITHUB_REPOSITORY
-	if (!repoPath) throw new Error('Missing required environment variable "GITHUB_REPOSITORY"')
+	if (!repoPath)
+		throw new Error(
+			'Missing required environment variable "GITHUB_REPOSITORY". This should be set automatically by GitHub Actions.',
+		)
 
 	const [owner, repo] = repoPath.split('/')
-	if (!owner || !repo) throw new Error('GITHUB_REPOSITORY is not in the expected format "owner/repo"')
+	if (!owner || !repo)
+		throw new Error('GITHUB_REPOSITORY is not in the expected format "owner/repo" (e.g. "foo/bar")')
 
 	try {
 		const octokit: Octokit = await createGitHubClient()
