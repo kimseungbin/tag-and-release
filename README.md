@@ -40,6 +40,10 @@ The label checker runs automatically when tag-and-release action is ran.
 
 ## Vite
 
+- Why Vite was chosen
+- How it's configured in the project
+- Its role in the build process
+
 ## Vitest
 
 Used Vitest instead of Jest for out-of-box TypeScript support.
