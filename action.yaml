@@ -1,5 +1,5 @@
 name: Release Automation Action
-author: @kimseungbin
+author: SeungBin Kim
 description: Automates the release process using semantic versioning and GitHub Actions.
 inputs:
   github-token:
