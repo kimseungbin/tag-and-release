@@ -29,6 +29,16 @@ The following labels are automatically managed:
 
 The label checker runs automatically when tag-and-release action is ran.
 
+# Tools used
+
+## Vite
+
+## Vitest
+
+Used Vitest instead of Jest for out-of-box TypeScript support.
+Jest alone can't handle dependencies like octokit and even with ts-jest, it required additional configurations.
+Whereas Vitest can run tests without any specific configurations.
+
 # Prerequisites
 
 # Installation
