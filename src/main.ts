@@ -15,9 +15,10 @@ import { RequestError } from '@octokit/request-error'
  * @throws {RequestError} If GitHub API calls fail (401, 403, etc.)
  */
 export async function run(): Promise<void> {
-	if (!process.env.GITHUB_REPOSITORY) throw new Error('Missing required environment variable "GITHUB_REPOSITORY"')
-	const [owner, repo] = process.env.GITHUB_REPOSITORY!.split('/')
+	const repoPath = process.env.GITHUB_REPOSITORY
+	if (!repoPath) throw new Error('Missing required environment variable "GITHUB_REPOSITORY"')
 
+	const [owner, repo] = repoPath.split('/')
 	if (!owner || !repo) throw new Error('GITHUB_REPOSITORY is not in the expected format "owner/repo"')
 
 	try {
