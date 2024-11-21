@@ -2,8 +2,8 @@ name: Release Automation Action
 author: @kimseungbin
 description: Automates the release process using semantic versioning and GitHub Actions.
 inputs:
-  name:
-    description: 'abc'
+  github-token:
+    description: 'GitHub token for authentication'
     required: true
 runs:
   using: 'node20'
