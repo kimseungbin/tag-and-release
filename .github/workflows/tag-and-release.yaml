@@ -3,6 +3,9 @@ on:
   - issues
   - pull_request
 jobs:
+  permissions:
+    issues: write
+    pull-requests: write
   label-check:
     runs-on: ubuntu-latest
     steps: kimseungbin/tag-and-release@v1
