@@ -37,7 +37,11 @@ export async function run(): Promise<void> {
 }
 
 /**
+ * Creates and returns a GitHub client instance using the provided token.
+ * This function retrieves the GitHub token from input and uses it
+ * to authenticate the Octokit instance.
  *
+ * @return {Promise<Octokit>} A promise that resolves to an authenticated Octokit instance.
  */
 async function createGitHubClient(): Promise<Octokit> {
 	const token = getInput('github-token', { required: true })
