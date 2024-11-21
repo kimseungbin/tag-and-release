@@ -11,7 +11,10 @@ import { LabelChecker } from './label-checker'
  * @throws {Error} If the required 'github-token' input is not provided
  */
 export async function run(): Promise<void> {
+	if (!process.env.GITHUB_REPOSITORY) throw new Error('Missing required environment variable "GITHUB_REPOSITORY"')
 	const [owner, repo] = process.env.GITHUB_REPOSITORY!.split('/')
+
+	if (!owner || !repo) throw new Error('GITHUB_REPOSITORY is not in the expected format "owner/repo"')
 
 	try {
 		const token = getInput('github-token', { required: true })
