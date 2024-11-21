@@ -34,7 +34,7 @@ The following labels are automatically managed:
 
 Note: Automatic label checking is currently under development. Please refer to issue #7 for implementation status and
 planned features.
-The label checker runs automatically when tag-and-release action is ran.
+The label checker runs automatically when tag-and-release action is run.
 
 # Tools used
 
