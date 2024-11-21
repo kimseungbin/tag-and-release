@@ -8,9 +8,8 @@ export class LabelChecker {
 		try {
 			LabelChecker.validateLabelConfigs(labelConfigs)
 			return labelConfigs
-		} catch (error) {
-			console.error('Failed to validate label configs:', error)
-			throw error
+		} catch (error: any) {
+			throw new Error(`Failed to initialize label configurations: ${error.message}`, { cause: error })
 		}
 	})()
 
