@@ -8,9 +8,9 @@ process.env.GITHUB_REPOSITORY = 'mock-owner/mock-repo'
  * Executes the main logic of the application.
  *
  * Ensures required labels exist and are properly configured.
- *n
+ *
  * @return {Promise<void>}
- * @throws {Error} If the required 'name' input is not provided
+ * @throws {Error} If the required 'github-token' input is not provided
  */
 export async function run(): Promise<void> {
 	const [owner, repo] = process.env.GITHUB_REPOSITORY!.split('/')
