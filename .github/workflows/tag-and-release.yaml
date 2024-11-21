@@ -8,4 +8,7 @@ jobs:
     pull-requests: write
   label-check:
     runs-on: ubuntu-latest
-    steps: kimseungbin/tag-and-release@v1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag and Release
+        uses: kimseungbin/tag-and-release@v1
