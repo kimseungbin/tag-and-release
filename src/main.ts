@@ -2,8 +2,6 @@ import { getInput, setFailed } from '@actions/core'
 import { Octokit } from '@octokit/rest'
 import { LabelChecker } from './label-checker'
 
-process.env.GITHUB_REPOSITORY = 'mock-owner/mock-repo'
-
 /**
  * Executes the main logic of the application.
  *

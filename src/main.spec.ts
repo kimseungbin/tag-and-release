@@ -3,6 +3,8 @@ import { getInput, info, setFailed } from '@actions/core'
 import { Octokit } from '@octokit/rest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+process.env.GITHUB_REPOSITORY = 'mock-owner/mock-repo'
+
 vi.mock('@actions/core', () => ({
 	getInput: vi.fn(),
 	setFailed: vi.fn(),
