@@ -8,7 +8,7 @@ import { getInput, info, setFailed } from '@actions/core'
  * @return {void}
  * @throws {Error} If the required 'name' input is not provided
  */
-export function run(): void {
+export async function run(): Promise<void> {
 	try {
 		const name = getInput('name', { required: true })
 
