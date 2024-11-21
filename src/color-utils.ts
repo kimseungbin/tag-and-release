@@ -1,4 +1,12 @@
-// isHexColorCode is a type guard to check if a string is a valid 6-character hex color code without #
+/**
+ * Type guard to check if a given string is a valid hexadecimal color code without #.
+ *
+ * @param {string} color - The string to be checked.
+ * @return {boolean} - Returns true if the string is a valid hex color code, otherwise false.
+ * @example
+ * isHexColorCode("ff0000") // returns true
+ * isHexColorCode("#ff0000") // returns false
+ */
 export function isHexColorCode(color: string): color is string {
 	const re = /^[0-9A-Fa-f]{6}$/
 	return re.test(color)
@@ -73,6 +81,7 @@ function getContrastRatio(foreground: string, background: string): number {
  * @param {string} foreground - The color code of the foreground in hexadecimal format.
  * @param {string} background - The color code of the background in hexadecimal format.
  * @return {boolean} True if the contrast ratio is sufficient for accessibility standards, false otherwise.
+ * @see https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
  */
 export function hasAccessibleContrast(foreground: string, background: string): boolean {
 	const MINIMUM_CONTRAST = 4.5
