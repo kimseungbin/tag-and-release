@@ -10,6 +10,9 @@ import { RequestError } from '@octokit/request-error'
  *
  * @return {Promise<void>}
  * @throws {Error} If the required 'github-token' input is not provided
+ * @throws {Error} If GITHUB_REPOSITORY environment variable is missing
+ * @throws {Error} If GITHUB_REPOSITORY format is invalid
+ * @throws {RequestError} If GitHub API calls fail (401, 403, etc.)
  */
 export async function run(): Promise<void> {
 	if (!process.env.GITHUB_REPOSITORY) throw new Error('Missing required environment variable "GITHUB_REPOSITORY"')
