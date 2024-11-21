@@ -1,7 +1,9 @@
 name: Tag and Release
 on:
-  - issues
-  - pull_request
+  issues:
+    types: [ opened, unlabeled ]
+  pull_request:
+    types: [ opened, unlabeled ]
 jobs:
   permissions:
     issues: write
