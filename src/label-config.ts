@@ -24,17 +24,17 @@ const GITHUB_COLORS = {
 export const labelConfigs: readonly LabelConfig[] = [
 	{
 		name: 'major',
-		description: 'Major version bump',
+		description: 'Breaking Changes ',
 		color: GITHUB_COLORS.RED, // GitHub's default red
 	},
 	{
 		name: 'minor',
-		description: 'Minor version bump',
+		description: 'New Features',
 		color: GITHUB_COLORS.GREEN, // GitHub's default green
 	},
 	{
 		name: 'patch',
-		description: 'Patch version bump',
+		description: 'Bug fixes and patches',
 		color: GITHUB_COLORS.BLUE, // GitHub's default blue
 	},
 ]
