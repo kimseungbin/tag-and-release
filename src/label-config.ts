@@ -66,7 +66,8 @@ labelConfigs.forEach((label) => {
 				`The color ${label.color} for label "${label.name}" does not have sufficient contrast with the dark background color ${DARK_BACKGROUND_COLOR}!`,
 			)
 		}
-	} catch (error: any) {
-		console.error(error.message)
+	} catch (error) {
+		if (error instanceof Error) console.error(error.message)
+		else console.error('An unknown error occurred during label validation', error)
 	}
 })
