@@ -1,5 +1,8 @@
 name: Tag and Release
 on:
+  push:
+    branches:
+      - '*'
   issues:
     types: [ opened, unlabeled ]
   pull_request:
