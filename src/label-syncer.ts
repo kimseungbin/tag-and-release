@@ -16,6 +16,41 @@ export class LabelSyncer {
 		this.octokit = octokit
 	}
 
+	async syncLabels(): Promise<void> {
+		try {
+			const { data: pr } = await this.octokit.rest.pulls.get({
+				owner: this.owner,
+				repo: this.repo,
+				pull_number: this.pull,
+			})
+
+			if (pr.body === null) {
+				console.warn('Pull request body is null')
+				return
+			}
+
+			const relatedIssueNumbers = this.extractLinkedIssues(pr.body)
+
+			const issueLabelsPromises = relatedIssueNumbers.map(async (issueNumber) => {
+				const { data: labels } = await this.octokit.rest.issues.listLabelsOnIssue({
+					owner: this.owner,
+					repo: this.repo,
+					issue_number: issueNumber,
+				})
+				return labels
+			})
+
+			const issueLabels = await Promise.all(issueLabelsPromises)
+
+			// todo Convert issue Labels to Label interface (Maybe DTO?)
+			// todo filter relevant labels only. Relevant labels are labels defined in label checker.
+			// todo get highestPriorityLabel
+			// todo sync the label to PR
+		} catch (error) {
+			throw new LabelSyncError('Failed to sync labels', error)
+		}
+	}
+
 	private validateOwner(owner: string): string {
 		const trimmed = owner?.trim()
 		const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i
@@ -38,8 +73,11 @@ export class LabelSyncer {
 		return trimmed
 	}
 
-	async syncLabels(): Promise<void> {
-		await this.octokit.rest.pulls.get({ owner: this.owner, repo: this.repo, pull_number: this.pull })
+	private extractLinkedIssues(body: string): number[] {
+		const closingKeywords = ['close', 'closes', 'fix', 'fixes', 'fixed', 'resolve', 'resolves', 'resolved']
+		const regex = new RegExp(`(?:${closingKeywords.join('|')})\\s+#(\\d+)`, 'gi')
+		const matches = [...body.matchAll(regex)]
+		return matches.map((match) => parseInt(match[1], 10))
 	}
 
 	private selectHighestPriorityLabels(labels: Label[]): Label {
