@@ -19,6 +19,7 @@ export interface Label {
 	description?: string
 	/** Hex color code (without #) for the label */
 	color: HexColor
+	priority: number
 }
 
 const GITHUB_COLORS = {
@@ -32,16 +33,19 @@ export const labelConfigs: readonly Label[] = [
 		name: 'major',
 		description: 'Breaking Changes ',
 		color: GITHUB_COLORS.RED, // GitHub's default red
+		priority: 0,
 	},
 	{
 		name: 'minor',
 		description: 'New Features',
 		color: GITHUB_COLORS.GREEN, // GitHub's default green
+		priority: 1,
 	},
 	{
 		name: 'patch',
 		description: 'Bug fixes and patches',
 		color: GITHUB_COLORS.BLUE, // GitHub's default blue
+		priority: 2,
 	},
 ]
 
