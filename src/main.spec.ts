@@ -3,6 +3,7 @@ import { getInput, info, setFailed } from '@actions/core'
 import { Octokit } from '@octokit/rest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+// Mock environment variable
 process.env.GITHUB_REPOSITORY = 'mock-owner/mock-repo'
 
 vi.mock('@actions/core', () => ({
@@ -42,22 +43,26 @@ describe('run', () => {
 		expect(getInput).toHaveBeenCalledWith('github-token', { required: true })
 	})
 
-	it('should call setFailed if getInput throws an error', async () => {
-		const errorMessage = 'An error occurred'
-		vi.mocked(getInput).mockImplementation(() => {
-			throw new Error(errorMessage)
-		})
-
-		await run()
-		expect(setFailed).toHaveBeenCalledWith(errorMessage)
+	it('should throw an error if GITHUB_REPOSITORY environment variable is missing', async () => {
+		const originalRepository = process.env.GITHUB_REPOSITORY
+		process.env.GITHUB_REPOSITORY = ''
+		await expect(run()).rejects.toThrow(
+			'Missing required environment variable "GITHUB_REPOSITORY". This should be set automatically by GitHub Actions.',
+		)
+		process.env.GITHUB_REPOSITORY = originalRepository
 	})
 
-	it('should call setFailed with a generic message if an unknown error occurs', async () => {
-		vi.mocked(getInput).mockImplementation(() => {
-			throw 'Unknown error'
-		})
+	it('should throw an error if GITHUB_REPOSITORY format is invalid', async () => {
+		const originalRepository = process.env.GITHUB_REPOSITORY
+		process.env.GITHUB_REPOSITORY = 'invalidFormat'
+		await expect(run()).rejects.toThrow(
+			'GITHUB_REPOSITORY is not in the expected format "owner/repo" (e.g. "foo/bar")',
+		)
+		process.env.GITHUB_REPOSITORY = originalRepository
+	})
 
+	it('should handle successful creation of GitHub client', async () => {
 		await run()
-		expect(setFailed).toHaveBeenCalledWith('An unknown error occurred during label checking.')
+		expect(Octokit).toHaveBeenCalled()
 	})
 })
