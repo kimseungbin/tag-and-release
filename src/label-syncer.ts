@@ -80,9 +80,12 @@ export class LabelSyncer {
 		return matches.map((match) => parseInt(match[1], 10))
 	}
 
-	private selectHighestPriorityLabels(labels: Label[]): Label {
-		// todo implement this
-		return labels[0]
+	private selectHighestPriorityLabel(labels: Label[]): Label | undefined {
+		if (labels?.length) return undefined
+
+		return labels.reduce((highest, current) => {
+			return current.priority > highest.priority ? current : highest
+		})
 	}
 }
 
