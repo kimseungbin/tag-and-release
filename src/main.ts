@@ -26,9 +26,15 @@ export async function run(): Promise<void> {
 	if (!owner || !repo)
 		throw new Error('GITHUB_REPOSITORY is not in the expected format "owner/repo" (e.g. "foo/bar")')
 
+	let octokit: Octokit
 	try {
-		const octokit: Octokit = await createGitHubClient()
+		octokit = await createGitHubClient()
+	} catch (error) {
+		console.error('An unknown error occurred while creating GitHub client.')
+		return
+	}
 
+	try {
 		const labelChecker = new LabelChecker(octokit, owner, repo)
 		await labelChecker.ensureLabelsExist()
 	} catch (error) {
@@ -41,7 +47,8 @@ export async function run(): Promise<void> {
 	}
 
 	try {
-		const labelSyncer = new LabelSyncer()
+		// todo Get PR number dynamically
+		const labelSyncer = new LabelSyncer(octokit, owner, repo, 1)
 	} catch (error) {
 		setFailed('An unknown error occurred during label syncing.')
 	}
