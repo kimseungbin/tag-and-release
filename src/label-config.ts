@@ -5,6 +5,12 @@ type BumpType = 'major' | 'minor' | 'patch'
 
 /**
  * Configuration for version bump labels
+ * @example
+ * {
+ *     name: 'major',
+ *     description: 'Breaking Changes',
+ *     color: 'd73a4a',
+ * }
  */
 export interface Label {
 	/** The name of the label */
