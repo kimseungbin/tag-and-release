@@ -8,3 +8,13 @@ export class LabelSyncer {
 		return labels[0]
 	}
 }
+
+class LabelSyncError extends Error {
+	constructor(
+		message: string,
+		public readonly cause?: unknown,
+	) {
+		super(message)
+		this.name = 'LabelSyncError'
+	}
+}
