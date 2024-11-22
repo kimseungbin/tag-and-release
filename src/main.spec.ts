@@ -62,6 +62,6 @@ describe('run', () => {
 		})
 
 		await run()
-		expect(setFailed).toHaveBeenCalledWith('An unknown error occurred')
+		expect(setFailed).toHaveBeenCalledWith('An unknown error occurred during label checking.')
 	})
 })
