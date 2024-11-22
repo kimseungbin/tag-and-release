@@ -2,14 +2,14 @@
   "name": "tag-and-release",
   "version": "1.0.0",
   "description": "This repository demonstrates how to automate the release process using semantic versioning and GitHub Actions. It provides a simple and effective way to manage versioned releases, ensuring consistent version control and streamlined workflows. By leveraging a custom JavaScript GitHub Action, this project helps you automate the creation of GitHub Releases based on tagged versions.",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc -w",
     "test": "vitest",
     "format:check": "prettier --check \"src/**/*.ts\"",
     "format:write": "prettier --write \"src/**/*.ts\"",
-    "package": "vite build"
+    "build": "ncc build src/main.ts -o dist",
+    "build:watch": "ncc build src/main.ts -o dist --watch",
+    "build:dev": "ncc build src/main.ts -o dist --source-map"
   },
   "keywords": [
     "semantic-versioning",
@@ -39,9 +39,9 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.9.0",
+    "@vercel/ncc": "^0.38.3",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3",
-    "vite": "^5.4.11",
     "vitest": "^2.1.5"
   },
   "dependencies": {
