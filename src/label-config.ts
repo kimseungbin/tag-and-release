@@ -6,7 +6,7 @@ type BumpType = 'major' | 'minor' | 'patch'
 /**
  * Configuration for version bump labels
  */
-export interface LabelConfig {
+export interface Label {
 	/** The name of the label */
 	name: BumpType
 	/** Description of what this label represents */
@@ -21,7 +21,7 @@ const GITHUB_COLORS = {
 	BLUE: '0969da' as HexColor,
 } as const
 
-export const labelConfigs: readonly LabelConfig[] = [
+export const labelConfigs: readonly Label[] = [
 	{
 		name: 'major',
 		description: 'Breaking Changes ',
