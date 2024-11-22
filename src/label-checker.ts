@@ -65,8 +65,10 @@ export class LabelChecker {
 			const existingLabelNames = existingLabels.data.map((label) => label.name)
 
 			const labelsToCreate = LabelChecker.labels.filter((label) => !existingLabelNames.includes(label.name))
-			if (labelsToCreate.length === 0) return
-
+			if (labelsToCreate.length === 0) {
+				console.info('All labels already exist')
+				return
+			}
 			await Promise.all(
 				labelsToCreate.map((label) => {
 					const { name, description, color } = label
