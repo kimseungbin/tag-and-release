@@ -49,8 +49,10 @@ export async function run(): Promise<void> {
 	try {
 		// todo Get PR number dynamically
 		const labelSyncer = new LabelSyncer(octokit, owner, repo, 1)
+		await labelSyncer.syncLabels()
 	} catch (error) {
-		setFailed('An unknown error occurred during label syncing.')
+		if (error instanceof Error) setFailed(error.message)
+		else setFailed('An unknown error occurred during label syncing.')
 	}
 }
 
