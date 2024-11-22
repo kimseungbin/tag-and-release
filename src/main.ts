@@ -51,3 +51,5 @@ async function createGitHubClient(): Promise<Octokit> {
 	const token = getInput('github-token', { required: true })
 	return new Octokit({ auth: token })
 }
+
+run()
