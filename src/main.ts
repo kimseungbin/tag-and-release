@@ -2,6 +2,7 @@ import { getInput, setFailed } from '@actions/core'
 import { Octokit } from '@octokit/rest'
 import { LabelChecker } from './label-checker'
 import { RequestError } from '@octokit/request-error'
+import { LabelSyncer } from './label-syncer'
 
 /**
  * Executes the main logic of the application.
@@ -36,7 +37,13 @@ export async function run(): Promise<void> {
 			else if (error.status === 403) setFailed('API rate limit exceeded or insufficient permissions.')
 			else setFailed(`GitHub API error: ${error.message}`)
 		} else if (error instanceof Error) setFailed(error.message)
-		else setFailed('An unknown error occurred')
+		else setFailed('An unknown error occurred during label checking.')
+	}
+
+	try {
+		const labelSyncer = new LabelSyncer()
+	} catch (error) {
+		setFailed('An unknown error occurred during label syncing.')
 	}
 }
 
