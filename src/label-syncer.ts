@@ -12,7 +12,7 @@ export class LabelSyncer {
 
 		this.owner = this.validateOwner(owner)
 		this.repo = this.validateRepo(repo)
-		this.pull = pull
+		this.pull = this.validatePullNumber(pull)
 		this.octokit = octokit
 	}
 
@@ -71,6 +71,12 @@ export class LabelSyncer {
 			)
 		}
 		return trimmed
+	}
+
+	private validatePullNumber(pull: number): number {
+		if (!Number.isInteger(pull) || pull < 1) throw new Error('Pull request number must be a positive integer')
+
+		return pull
 	}
 
 	private extractLinkedIssues(body: string): number[] {
