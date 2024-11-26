@@ -30,6 +30,11 @@ export class LabelSyncer {
 			}
 
 			const relatedIssueNumbers = this.extractLinkedIssues(pr.body)
+			if (relatedIssueNumbers.length === 0) {
+				// todo Must warn in PR comment too.
+				console.warn('No linked issues found')
+				return
+			}
 
 			const issueLabelsPromises = relatedIssueNumbers.map(async (issueNumber) => {
 				const { data: labels } = await this.octokit.rest.issues.listLabelsOnIssue({
