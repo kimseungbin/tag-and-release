@@ -19,6 +19,7 @@ export interface Label {
 	description?: string
 	/** Hex color code (without #) for the label */
 	color: HexColor
+	/** Priority of the label (lower number = higher priority) */
 	priority: number
 }
 
