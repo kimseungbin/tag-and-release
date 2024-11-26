@@ -1,4 +1,4 @@
-import { Label } from './label-config'
+import { BumpType, HexColor, Label } from './label-config'
 import { Octokit } from '@octokit/rest'
 
 export class LabelSyncer {
@@ -46,11 +46,26 @@ export class LabelSyncer {
 			})
 
 			const issueLabels = await Promise.all(issueLabelsPromises)
+			const flattenedLabels = issueLabels.flat()
 
-			// todo Convert issue Labels to Label interface (Maybe DTO?)
-			// todo filter relevant labels only. Relevant labels are labels defined in label checker.
-			// todo get highestPriorityLabel
-			// todo sync the label to PR
+			const labels: Label[] = flattenedLabels.map((label) => ({
+				name: label.name as BumpType,
+				priority: this.getLabelPriority(label.name),
+				color: label.color as HexColor,
+			}))
+
+			const highestPriorityLabel = this.selectHighestPriorityLabel(labels)
+			if (!highestPriorityLabel) {
+				console.warn('No priority labels found')
+				return
+			}
+
+			await this.octokit.rest.issues.addLabels({
+				owner: this.owner,
+				repo: this.repo,
+				issue_number: this.pull,
+				labels: [highestPriorityLabel.name],
+			})
 		} catch (error) {
 			throw new LabelSyncError('Failed to sync labels', error)
 		}

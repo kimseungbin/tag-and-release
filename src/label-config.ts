@@ -1,7 +1,7 @@
 import { hasAccessibleContrast, validateColorCode } from './color-utils'
 
-type HexColor = string & { readonly __brand: unique symbol }
-type BumpType = 'major' | 'minor' | 'patch'
+export type HexColor = string & { readonly __brand: unique symbol }
+export type BumpType = 'major' | 'minor' | 'patch'
 
 /**
  * Configuration for version bump labels
