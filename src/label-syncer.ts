@@ -91,6 +91,17 @@ export class LabelSyncer {
 		return matches.map((match) => parseInt(match[1], 10))
 	}
 
+	private getLabelPriority(labelName: string): number {
+		// Todo must use configuration in future.
+		const priorities = {
+			major: 3,
+			minor: 2,
+			patch: 1,
+		}
+
+		return priorities[labelName.toLowerCase() as keyof typeof priorities] ?? 0
+	}
+
 	private selectHighestPriorityLabel(labels: Label[]): Label | undefined {
 		if (!labels?.length) return undefined
 
