@@ -87,11 +87,11 @@ export class LabelSyncer {
 	}
 
 	private selectHighestPriorityLabel(labels: Label[]): Label | undefined {
-		if (labels?.length) return undefined
+		if (!labels?.length) return undefined
 
 		return labels.reduce((highest, current) => {
 			return current.priority > highest.priority ? current : highest
-		})
+		}, labels[0])
 	}
 }
 
