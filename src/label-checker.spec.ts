@@ -25,16 +25,45 @@ describe('Label Checker - GitHub Label Management', () => {
 		labelChecker = new LabelChecker(octokit, TEST_CONFIG.owner, TEST_CONFIG.repo)
 	})
 
+	interface LabelWithPriority {
+		name: string
+		priority: number
+	}
 	// Test cases for all 2^3 combinations of labels
-	const combinations: [string[], string[]][] = [
+	const combinations: [LabelWithPriority[], string[]][] = [
 		[[], ['major', 'minor', 'patch']], // No labels exist
-		[['major'], ['minor', 'patch']], // 'major' exists
-		[['minor'], ['major', 'patch']], // 'minor' exists
-		[['patch'], ['major', 'minor']], // 'patch' exists
-		[['major', 'minor'], ['patch']], // 'major', 'minor' exist
-		[['major', 'patch'], ['minor']], // 'major', 'patch' exist
-		[['minor', 'patch'], ['major']], // 'minor', 'patch' exist
-		[['major', 'minor', 'patch'], []], // All labels exist
+		[[{ name: 'major', priority: 1 }], ['minor', 'patch']], // 'major' exists
+		[[{ name: 'minor', priority: 1 }], ['major', 'patch']], // 'minor' exists
+		[[{ name: 'patch', priority: 1 }], ['major', 'minor']], // 'patch' exists
+		[
+			[
+				{ name: 'major', priority: 1 },
+				{ name: 'minor', priority: 2 },
+			],
+			['patch'],
+		], // 'major', 'minor' exist
+		[
+			[
+				{ name: 'major', priority: 1 },
+				{ name: 'patch', priority: 2 },
+			],
+			['minor'],
+		], // 'major', 'patch' exist
+		[
+			[
+				{ name: 'minor', priority: 1 },
+				{ name: 'patch', priority: 2 },
+			],
+			['major'],
+		], // 'minor', 'patch' exist
+		[
+			[
+				{ name: 'major', priority: 1 },
+				{ name: 'minor', priority: 2 },
+				{ name: 'patch', priority: 3 },
+			],
+			[],
+		], // All labels exist
 	]
 
 	// Todo fix this test from failing after implementing priority in labels.
@@ -43,7 +72,7 @@ describe('Label Checker - GitHub Label Management', () => {
 		async (existingLabels, missingLabels) => {
 			vi.mocked(octokit.rest.issues.listLabelsForRepo).mockResolvedValue({
 				// @ts-ignore
-				data: existingLabels.map((label) => ({ name: label })),
+				data: existingLabels.map((label) => ({ name: label.name })),
 			})
 
 			const createLabelSpy = vi.mocked(octokit.rest.issues.createLabel)
@@ -56,10 +85,13 @@ describe('Label Checker - GitHub Label Management', () => {
 			})
 			expect(createLabelSpy).toHaveBeenCalledTimes(missingLabels.length)
 			missingLabels.forEach((label) => {
+				const labelConfig = LabelChecker.getLabelConfig(label)
+				if (!labelConfig) throw new Error(`Label config not found for label ${label}`)
+				const { priority, ...labelConfigWithoutPriority } = labelConfig
 				const expectedLabel = {
 					owner: TEST_CONFIG.owner,
 					repo: TEST_CONFIG.repo,
-					...LabelChecker.getLabelConfig(label),
+					...labelConfigWithoutPriority,
 				}
 				expect(createLabelSpy).toHaveBeenCalledWith(expectedLabel)
 			})

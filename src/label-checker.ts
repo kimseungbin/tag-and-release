@@ -37,7 +37,9 @@ export class LabelChecker {
 		this.octokit = octokit
 	}
 
-	static getLabelConfig(labelName: string): { name: string; description?: string; color: string } | undefined {
+	static getLabelConfig(
+		labelName: string,
+	): { name: string; description?: string; color: string; priority: number } | undefined {
 		return LabelChecker.labels.find((label) => label.name === labelName)
 	}
 
