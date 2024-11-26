@@ -1,18 +1,26 @@
 import { hasAccessibleContrast, validateColorCode } from './color-utils'
 
-type HexColor = string & { readonly __brand: unique symbol }
-type BumpType = 'major' | 'minor' | 'patch'
+export type HexColor = string & { readonly __brand: unique symbol }
+export type BumpType = 'major' | 'minor' | 'patch'
 
 /**
  * Configuration for version bump labels
+ * @example
+ * {
+ *     name: 'major',
+ *     description: 'Breaking Changes',
+ *     color: 'd73a4a',
+ * }
  */
-export interface LabelConfig {
+export interface Label {
 	/** The name of the label */
 	name: BumpType
 	/** Description of what this label represents */
 	description?: string
 	/** Hex color code (without #) for the label */
 	color: HexColor
+	/** Priority of the label (lower number = higher priority) */
+	priority: number
 }
 
 const GITHUB_COLORS = {
@@ -21,21 +29,24 @@ const GITHUB_COLORS = {
 	BLUE: '0969da' as HexColor,
 } as const
 
-export const labelConfigs: readonly LabelConfig[] = [
+export const labelConfigs: readonly Label[] = [
 	{
 		name: 'major',
 		description: 'Breaking Changes ',
 		color: GITHUB_COLORS.RED, // GitHub's default red
+		priority: 0,
 	},
 	{
 		name: 'minor',
 		description: 'New Features',
 		color: GITHUB_COLORS.GREEN, // GitHub's default green
+		priority: 1,
 	},
 	{
 		name: 'patch',
 		description: 'Bug fixes and patches',
 		color: GITHUB_COLORS.BLUE, // GitHub's default blue
+		priority: 2,
 	},
 ]
 
@@ -60,7 +71,8 @@ labelConfigs.forEach((label) => {
 				`The color ${label.color} for label "${label.name}" does not have sufficient contrast with the dark background color ${DARK_BACKGROUND_COLOR}!`,
 			)
 		}
-	} catch (error: any) {
-		console.error(error.message)
+	} catch (error) {
+		if (error instanceof Error) console.error(error.message)
+		else console.error('An unknown error occurred during label validation', error)
 	}
 })
