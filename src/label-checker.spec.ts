@@ -37,6 +37,7 @@ describe('Label Checker - GitHub Label Management', () => {
 		[['major', 'minor', 'patch'], []], // All labels exist
 	]
 
+	// Todo fix this test from failing after implementing priority in labels.
 	it.each(combinations)(
 		'should create missing labels when existing labels are: %j',
 		async (existingLabels, missingLabels) => {
