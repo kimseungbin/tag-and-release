@@ -48,11 +48,19 @@ export class LabelSyncer {
 			const issueLabels = await Promise.all(issueLabelsPromises)
 			const flattenedLabels = issueLabels.flat()
 
-			const labels: Label[] = flattenedLabels.map((label) => ({
-				name: label.name as BumpType,
-				priority: this.getLabelPriority(label.name),
-				color: label.color as HexColor,
-			}))
+			const labels: Label[] = flattenedLabels
+				.map((label) => {
+					const name = label.name.toLowerCase()
+					if (!['major', 'minor', 'patch'].includes(name)) {
+						return undefined
+					}
+					return {
+						name: name as BumpType,
+						priority: this.getLabelPriority(label.name),
+						color: label.color as HexColor,
+					}
+				})
+				.filter((label): label is Label => label !== undefined)
 
 			const highestPriorityLabel = this.selectHighestPriorityLabel(labels)
 			if (!highestPriorityLabel) {
