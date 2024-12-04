@@ -37,7 +37,9 @@ export class LabelChecker {
 		this.octokit = octokit
 	}
 
-	static getLabelConfig(labelName: string): { name: string; description?: string; color: string } | undefined {
+	static getLabelConfig(
+		labelName: string,
+	): { name: string; description?: string; color: string; priority: number } | undefined {
 		return LabelChecker.labels.find((label) => label.name === labelName)
 	}
 
@@ -65,8 +67,10 @@ export class LabelChecker {
 			const existingLabelNames = existingLabels.data.map((label) => label.name)
 
 			const labelsToCreate = LabelChecker.labels.filter((label) => !existingLabelNames.includes(label.name))
-			if (labelsToCreate.length === 0) return
-
+			if (labelsToCreate.length === 0) {
+				console.info('All labels already exist')
+				return
+			}
 			await Promise.all(
 				labelsToCreate.map((label) => {
 					const { name, description, color } = label
@@ -86,5 +90,15 @@ export class LabelChecker {
 			console.error(error)
 			throw new Error('Failed to check labels')
 		}
+	}
+}
+
+class LabelCheckError extends Error {
+	constructor(
+		message: string,
+		public readonly cause?: unknown,
+	) {
+		super(message)
+		this.name = 'LabelCheckError'
 	}
 }

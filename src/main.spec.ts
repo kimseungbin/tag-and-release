@@ -3,8 +3,6 @@ import { getInput, info, setFailed } from '@actions/core'
 import { Octokit } from '@octokit/rest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-process.env.GITHUB_REPOSITORY = 'mock-owner/mock-repo'
-
 vi.mock('@actions/core', () => ({
 	getInput: vi.fn(),
 	setFailed: vi.fn(),
@@ -23,10 +21,6 @@ vi.mock('@octokit/rest', () => {
 					addLabels: vi.fn(),
 					get: vi.fn(),
 				},
-				pulls: {
-					get: vi.fn(),
-					update: vi.fn(),
-				},
 			},
 		})),
 	}
@@ -39,6 +33,9 @@ describe('run', () => {
 		vi.mocked(setFailed).mockReset()
 		vi.mocked(info).mockReset()
 		vi.mocked(Octokit).mockClear()
+
+		// Mock environment variable
+		process.env.GITHUB_REPOSITORY = 'mock-owner/mock-repo'
 	})
 
 	it('should call getInput with correct arguments', async () => {
@@ -46,22 +43,22 @@ describe('run', () => {
 		expect(getInput).toHaveBeenCalledWith('github-token', { required: true })
 	})
 
-	it('should call setFailed if getInput throws an error', async () => {
-		const errorMessage = 'An error occurred'
-		vi.mocked(getInput).mockImplementation(() => {
-			throw new Error(errorMessage)
-		})
-
-		await run()
-		expect(setFailed).toHaveBeenCalledWith(errorMessage)
+	it('should throw an error if GITHUB_REPOSITORY environment variable is missing', async () => {
+		process.env.GITHUB_REPOSITORY = ''
+		await expect(run()).rejects.toThrow(
+			'Missing required environment variable "GITHUB_REPOSITORY". This should be set automatically by GitHub Actions.',
+		)
 	})
 
-	it('should call setFailed with a generic message if an unknown error occurs', async () => {
-		vi.mocked(getInput).mockImplementation(() => {
-			throw 'Unknown error'
-		})
+	it('should throw an error if GITHUB_REPOSITORY format is invalid', async () => {
+		process.env.GITHUB_REPOSITORY = 'invalidFormat'
+		await expect(run()).rejects.toThrow(
+			'GITHUB_REPOSITORY is not in the expected format "owner/repo" (e.g. "foo/bar")',
+		)
+	})
 
+	it('should handle successful creation of GitHub client', async () => {
 		await run()
-		expect(setFailed).toHaveBeenCalledWith('An unknown error occurred')
+		expect(Octokit).toHaveBeenCalled()
 	})
 })

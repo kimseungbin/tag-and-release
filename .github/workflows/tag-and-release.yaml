@@ -1,5 +1,8 @@
 name: Tag and Release
 on:
+  push:
+    branches:
+      - '*'
   issues:
     types: [ opened, unlabeled ]
   pull_request:
@@ -24,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: npm run package
+        run: npm run build
       - name: Test Local Action
         id: test-local-action
         uses: ./
