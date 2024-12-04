@@ -116,7 +116,7 @@ export class LabelSyncer {
 		return matches
 			.map((match) => {
 				const num = parseInt(match[1], 10)
-				return isNaN(num) || num < 1 ? null : num
+				return Number.isNaN(num) || num < 1 ? null : num
 			})
 			.filter((num): num is number => num !== null)
 	}
