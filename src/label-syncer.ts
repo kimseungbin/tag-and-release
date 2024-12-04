@@ -108,10 +108,17 @@ export class LabelSyncer {
 	}
 
 	private extractLinkedIssues(body: string): number[] {
+		if (!body?.trim()) return []
+
 		const closingKeywords = ['close', 'closes', 'fix', 'fixes', 'fixed', 'resolve', 'resolves', 'resolved']
 		const regex = new RegExp(`(?:${closingKeywords.join('|')})\\s+#(\\d+)`, 'gi')
 		const matches = [...body.matchAll(regex)]
-		return matches.map((match) => parseInt(match[1], 10))
+		return matches
+			.map((match) => {
+				const num = parseInt(match[1], 10)
+				return isNaN(num) || num < 1 ? null : num
+			})
+			.filter((num): num is number => num !== null)
 	}
 
 	private getLabelPriority(labelName: string): number {
