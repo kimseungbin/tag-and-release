@@ -1,7 +1,7 @@
 import { describe, it } from 'vitest'
 
 describe('Branch Setup', () => {
-	it.todo('should check if required branches exist')
-	it.todo('should comment on PR if required branches do not exist.')
-	it.todo('should create required branches on specific PR comment.')
+	it.todo('should verify existence of main, stage, and release branches')
+	it.todo('should comment on PR with branch creation instructions when required branches are missing')
+	it.todo('should create branches when PR comment contains "/create-branches" command')
 })
