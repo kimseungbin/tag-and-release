@@ -1,4 +1,14 @@
-import { describe, it } from 'vitest'
+import { beforeEach, describe, it } from 'vitest'
+import { BranchSetup } from './branch-setup'
+import { Octokit } from '@octokit/rest'
+
+let branchSetup: BranchSetup
+let octokit: Octokit
+
+beforeEach(() => {
+	octokit = new Octokit()
+	branchSetup = new BranchSetup(octokit)
+})
 
 describe('Branch Setup', () => {
 	it.todo('should verify existence of main, stage, and release branches')
