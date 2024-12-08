@@ -16,11 +16,11 @@ export class BranchSetup extends GithubClientBase {
 	 * @return {Promise<string[]>} A promise that resolves to an array containing the names of all branches in the repository.
 	 */
 	public async getBranches(): Promise<string[]> {
-		const octokit = new Octokit()
-		const response = await octokit.repos.listBranches({
+		const response = await this.octokit.repos.listBranches({
 			owner: this.owner,
 			repo: this.repo,
 		})
+
 		return response.data.map((branch) => branch.name)
 	}
 }
