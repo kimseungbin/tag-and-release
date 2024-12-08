@@ -1,11 +1,41 @@
 import { Octokit } from '@octokit/rest'
 import { GithubClientBase } from './github-client-base'
 
+export interface BRANCH_CONFIG {
+	development: {
+		name?: string
+		isUsed: boolean
+	}
+	staging: {
+		name?: string
+		isUsed: boolean
+	}
+	production: {
+		name?: string
+		isUsed: boolean
+	}
+}
+
 /**
  * Manages repository branch operations using GitHub's API
  * @class BranchSetup
  */
 export class BranchSetup extends GithubClientBase {
+	private readonly branchConfig: BRANCH_CONFIG = {
+		development: {
+			name: 'main',
+			isUsed: true,
+		},
+		staging: {
+			name: 'stage',
+			isUsed: true,
+		},
+		production: {
+			name: 'release',
+			isUsed: true,
+		},
+	}
+
 	constructor(octokit: Octokit, owner: string, repo: string) {
 		super(octokit, owner, repo)
 	}
@@ -22,5 +52,17 @@ export class BranchSetup extends GithubClientBase {
 		})
 
 		return response.data.map((branch) => branch.name)
+	}
+
+	public async verifyBranches(): Promise<boolean> {
+		const branches = await this.getBranches()
+
+		return Object.keys(this.branchConfig).every((key) => {
+			const branchDetails = this.branchConfig[key as keyof BRANCH_CONFIG]
+			if (branchDetails.isUsed) {
+				return branches.includes(branchDetails.name || '')
+			}
+			return true
+		})
 	}
 }
