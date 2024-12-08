@@ -37,6 +37,14 @@ describe('Branch Setup', () => {
 		expect(branches).toContain('stage')
 		expect(branches).toContain('release')
 	})
+	describe('verifyBranches', () => {
+		it('should verify existence of all required branches', async () => {
+			const verifyBranches = vi.spyOn(branchSetup, 'verifyBranches')
+			await branchSetup.verifyBranches()
+			expect(verifyBranches).toHaveBeenCalled()
+		})
+		it.todo('should return false if one or more required branch')
+	})
 	it.todo('should comment on PR with branch creation instructions when required branches are missing')
 	it.todo('should create branches when PR comment contains "/create-branches" command')
 })
