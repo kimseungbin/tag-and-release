@@ -1,7 +1,7 @@
 ---
 name: Infrastructure Task
 about: Track tasks related to infrastructure improvements or changes
-title: 'Infra: [enter task summary]'
+title: 'infra: [enter task summary]'
 labels: infra, patch
 assignees: kimseungbin  # You can adjust this if necessary
 
