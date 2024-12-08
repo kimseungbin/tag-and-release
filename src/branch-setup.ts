@@ -1,13 +1,26 @@
 import { Octokit } from '@octokit/rest'
+import { GithubClientBase } from './github-client-base'
 
 /**
  * Manages repository branch operations using GitHub's API
  * @class BranchSetup
  */
-export class BranchSetup {
-	private readonly octokit: Octokit
+export class BranchSetup extends GithubClientBase {
+	constructor(octokit: Octokit, owner: string, repo: string) {
+		super(octokit, owner, repo)
+	}
 
-	constructor(octokit: Octokit) {
-		this.octokit = octokit
+	/**
+	 * Retrieves the list of branch names from a specified repository.
+	 *
+	 * @return {Promise<string[]>} A promise that resolves to an array containing the names of all branches in the repository.
+	 */
+	public async getBranches(): Promise<string[]> {
+		const octokit = new Octokit()
+		const response = await octokit.repos.listBranches({
+			owner: this.owner,
+			repo: this.repo,
+		})
+		return response.data.map((branch) => branch.name)
 	}
 }
