@@ -1,7 +1,7 @@
 ---
 name: Breaking Change
 about: Document a breaking change that requires a major version update
-title: 'Breaking: [enter breaking change summary]'
+title: 'breaking: [enter breaking change summary]'
 labels: breaking-change, major
 assignees: kimseungbin  # You can change this to assign another user if needed
 
