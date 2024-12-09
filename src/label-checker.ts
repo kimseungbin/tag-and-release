@@ -1,5 +1,3 @@
-import { Octokit } from '@octokit/rest'
-
 import { labelConfigs } from './label-config'
 import { validateColorCode } from './color-utils'
 import { GithubClientBase } from './github-client-base'
@@ -13,10 +11,6 @@ export class LabelChecker extends GithubClientBase {
 			throw new Error(`Failed to initialize label configurations: ${error.message}`, { cause: error })
 		}
 	})()
-
-	constructor(octokit: Octokit, repoPath: string) {
-		super(octokit, repoPath)
-	}
 
 	static getLabelConfig(
 		labelName: string,
@@ -71,15 +65,5 @@ export class LabelChecker extends GithubClientBase {
 			console.error(error)
 			throw new Error('Failed to check labels')
 		}
-	}
-}
-
-class LabelCheckError extends Error {
-	constructor(
-		message: string,
-		public readonly cause?: unknown,
-	) {
-		super(message)
-		this.name = 'LabelCheckError'
 	}
 }
