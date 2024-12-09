@@ -123,7 +123,7 @@ gitGraph
     - The hotfix branch is merged into `main` with a tag `v0.1.1-dev`.
     - Changes from `main` are merged into the `stage` branch and tagged as `v0.1.1-rc`.
 6. Production Release:
-    - Changes form `stage` are merged into the `release` branch and tagged as `v0.1.1`.
+   - Changes from `stage` are merged into the `release` branch and tagged as `v0.1.1`.
 7. Breaking Changes:
     - A breaking changes branch `breaking/3` is created from main.
     - Multiple commits are added to introduce breaking changes.
