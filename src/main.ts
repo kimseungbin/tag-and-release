@@ -3,6 +3,7 @@ import { Octokit } from '@octokit/rest'
 import { LabelChecker } from './label-checker'
 import { RequestError } from '@octokit/request-error'
 import { LabelSyncer } from './label-syncer'
+import { RepositoryPath } from './github-client-base'
 
 /**
  * Executes the main logic of the application.
@@ -16,11 +17,12 @@ import { LabelSyncer } from './label-syncer'
  * @throws {RequestError} If GitHub API calls fail (401, 403, etc.)
  */
 export async function run(): Promise<void> {
-	const repoPath = process.env.GITHUB_REPOSITORY
-	if (!repoPath)
+	const repoPath = process.env.GITHUB_REPOSITORY as RepositoryPath | undefined
+	if (!repoPath) {
 		throw new Error(
 			'Missing required environment variable "GITHUB_REPOSITORY". This should be set automatically by GitHub Actions.',
 		)
+	}
 
 	const [owner, repo] = repoPath.split('/')
 	if (!owner || !repo)
