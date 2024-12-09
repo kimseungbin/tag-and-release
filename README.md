@@ -59,11 +59,14 @@ It also demonstrates the process of feature implementation, bug fixes, and relea
 title: Example Git Diagram
 ---
 gitGraph
+%% Initialize repository
     commit id: "Init" tag: "v0.0.0"
+%% Create environment branches
     branch stage order: 1
     checkout stage
     branch release order: 2
     branch feat/1 order: 3
+%% Create a feature branch
     checkout feat/1
     commit id: "test"
     commit id: "implement"
