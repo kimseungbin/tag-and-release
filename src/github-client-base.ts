@@ -1,11 +1,13 @@
 import { Octokit } from '@octokit/rest'
 
+type RepositoryPath = `${string}/${string}`
+
 export abstract class GithubClientBase {
 	protected readonly owner: string
 	protected readonly repo: string
 	protected readonly octokit: Octokit
 
-	protected constructor(octokit: Octokit, repoPath: string) {
+	protected constructor(octokit: Octokit, repoPath: RepositoryPath) {
 		if (!octokit) throw new Error('Octokit instance is required')
 		this.octokit = octokit
 
@@ -23,7 +25,7 @@ export abstract class GithubClientBase {
 	 * @return A tuple containing the owner and repository names if the path is valid.
 	 * @throws An error if the repository path does not meet the specified criteria.
 	 */
-	private validateRepoPath(repoPath: string): [owner: string, repo: string] {
+	private validateRepoPath(repoPath: RepositoryPath): [owner: string, repo: string] {
 		const combinedRegex = /^([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})\/([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,100})$/i
 		if (!combinedRegex.test(repoPath)) {
 			throw new Error(
