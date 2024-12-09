@@ -7,14 +7,10 @@ describe('Label Checker - GitHub Label Management', () => {
 	let labelChecker: LabelChecker
 
 	interface TestConfig {
-		readonly owner: string
-		readonly repo: string
 		readonly repoPath: string
 	}
 
 	const TEST_CONFIG: TestConfig = {
-		owner: 'kimseungbin',
-		repo: 'tag-and-release',
 		repoPath: 'kimseungbin/tag-and-release',
 	}
 
@@ -81,9 +77,11 @@ describe('Label Checker - GitHub Label Management', () => {
 
 			await labelChecker.ensureLabelsExist()
 
+			const [owner, repo] = TEST_CONFIG.repoPath.split('/')
+
 			expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({
-				owner: TEST_CONFIG.owner,
-				repo: TEST_CONFIG.repo,
+				owner,
+				repo,
 			})
 			expect(createLabelSpy).toHaveBeenCalledTimes(missingLabels.length)
 			missingLabels.forEach((label) => {
@@ -91,8 +89,8 @@ describe('Label Checker - GitHub Label Management', () => {
 				if (!labelConfig) throw new Error(`Label config not found for label ${label}`)
 				const { priority, ...labelConfigWithoutPriority } = labelConfig
 				const expectedLabel = {
-					owner: TEST_CONFIG.owner,
-					repo: TEST_CONFIG.repo,
+					owner,
+					repo,
 					...labelConfigWithoutPriority,
 				}
 				expect(createLabelSpy).toHaveBeenCalledWith(expectedLabel)
