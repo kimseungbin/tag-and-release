@@ -27,42 +27,42 @@ describe('LabelSyncer', () => {
 		labelSyncer = new LabelSyncer(octokit, repoPath, pullNumber)
 	})
 
-	it('should fetch all issues linked to PR', async () => {
-		vi.spyOn(octokit.rest.pulls, 'get').mockResolvedValue({
-			data: { body: 'Fixes #1, Closes #2' },
+	describe('linked issues handling', () => {
+		it('should fetch all issues when multiple issues are linked', async () => {
+			vi.spyOn(octokit.rest.pulls, 'get').mockResolvedValue({
+				data: { body: 'Fixes #1, Closes #2' },
+			})
+			vi.spyOn(octokit.rest.issues, 'listLabelsOnIssue').mockResolvedValue({
+				data: [{ name: 'minor', color: '' }],
+			})
+			vi.spyOn(octokit.rest.issues, 'addLabels').mockResolvedValue(Promise.resolve())
+			await labelSyncer.syncLabels()
+			expect(octokit.rest.issues.listLabelsOnIssue).toHaveBeenCalledTimes(2)
 		})
-		vi.spyOn(octokit.rest.issues, 'listLabelsOnIssue').mockResolvedValue({
-			data: [{ name: 'minor', color: '' }],
+		it('should copy labels from single linked issue', async () => {
+			vi.spyOn(octokit.rest.pulls, 'get').mockResolvedValue({
+				data: { body: 'Resolves #1' },
+			})
+			vi.spyOn(octokit.rest.issues, 'listLabelsOnIssue').mockResolvedValue({
+				data: [{ name: 'patch', color: '' }],
+			})
+			vi.spyOn(octokit.rest.issues, 'addLabels').mockResolvedValue(Promise.resolve())
+			await labelSyncer.syncLabels()
+			expect(octokit.rest.issues.addLabels).toHaveBeenCalledWith({
+				owner: 'owner',
+				repo: 'repo',
+				issue_number: 1,
+				labels: ['patch'],
+			})
 		})
-		vi.spyOn(octokit.rest.issues, 'addLabels').mockResolvedValue(Promise.resolve())
-		await labelSyncer.syncLabels()
-		expect(octokit.rest.issues.listLabelsOnIssue).toHaveBeenCalledTimes(2)
-	})
-
-	it('should copy labels from single linked issue', async () => {
-		vi.spyOn(octokit.rest.pulls, 'get').mockResolvedValue({
-			data: { body: 'Resolves #1' },
+		it('should handle PR with no linked issues', async () => {
+			vi.spyOn(octokit.rest.pulls, 'get').mockResolvedValue({
+				data: { body: '' },
+			})
+			const consoleWarnSpy = vi.spyOn(console, 'warn')
+			await labelSyncer.syncLabels()
+			expect(consoleWarnSpy).toHaveBeenCalledWith('No linked issues found')
 		})
-		vi.spyOn(octokit.rest.issues, 'listLabelsOnIssue').mockResolvedValue({
-			data: [{ name: 'patch', color: '' }],
-		})
-		vi.spyOn(octokit.rest.issues, 'addLabels').mockResolvedValue(Promise.resolve())
-		await labelSyncer.syncLabels()
-		expect(octokit.rest.issues.addLabels).toHaveBeenCalledWith({
-			owner: 'owner',
-			repo: 'repo',
-			issue_number: 1,
-			labels: ['patch'],
-		})
-	})
-
-	it('should handle PR with no linked issues', async () => {
-		vi.spyOn(octokit.rest.pulls, 'get').mockResolvedValue({
-			data: { body: '' },
-		})
-		const consoleWarnSpy = vi.spyOn(console, 'warn')
-		await labelSyncer.syncLabels()
-		expect(consoleWarnSpy).toHaveBeenCalledWith('No linked issues found')
 	})
 
 	it('should prioritize a specific label when multiple labels for semantic versioning are found.', async () => {
