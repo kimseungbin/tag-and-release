@@ -1,6 +1,6 @@
 import { Octokit } from '@octokit/rest'
 
-type RepositoryPath = `${string}/${string}`
+export type RepositoryPath = `${string}/${string}`
 
 export abstract class GithubClientBase {
 	protected readonly owner: string
