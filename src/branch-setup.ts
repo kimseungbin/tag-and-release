@@ -24,9 +24,6 @@ export interface BranchConfig {
  * @class BranchSetup
  */
 export class BranchSetup extends GithubClientBase {
-	constructor(octokit: Octokit, repoPath: RepositoryPath) {
-		super(octokit, repoPath)
-	}
 	private readonly branchConfig: BranchConfig = {
 		development: {
 			name: 'main',
@@ -40,6 +37,10 @@ export class BranchSetup extends GithubClientBase {
 			name: 'release',
 			isUsed: true,
 		},
+	}
+
+	constructor(octokit: Octokit, repoPath: RepositoryPath) {
+		super(octokit, repoPath)
 	}
 
 	/**
