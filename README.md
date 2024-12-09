@@ -45,8 +45,8 @@ These branches correspond to different deployment environments in the release pi
 
 | Branch Name | Environment | Version Example |
 |-------------|-------------|-----------------|
-| main        | Development | v2.7.3-dev      |
-| stage       | Staging     | v10.30.0-rc     |
+| main        | Development | v1.0.0-dev      |
+| stage       | Staging     | v1.0.0-rc       |
 | release     | Production  | v1.0.0          |
 
 ### Release Workflow
