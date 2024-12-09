@@ -9,11 +9,13 @@ describe('Label Checker - GitHub Label Management', () => {
 	interface TestConfig {
 		readonly owner: string
 		readonly repo: string
+		readonly repoPath: string
 	}
 
 	const TEST_CONFIG: TestConfig = {
 		owner: 'kimseungbin',
 		repo: 'tag-and-release',
+		repoPath: 'kimseungbin/tag-and-release',
 	}
 
 	beforeEach(() => {
@@ -22,7 +24,7 @@ describe('Label Checker - GitHub Label Management', () => {
 		octokit.rest.issues.listLabelsForRepo = vi.fn().mockResolvedValue({ data: [] }) as any
 		octokit.rest.issues.createLabel = vi.fn().mockResolvedValue({ data: {} }) as any
 
-		labelChecker = new LabelChecker(octokit, TEST_CONFIG.owner, TEST_CONFIG.repo)
+		labelChecker = new LabelChecker(octokit, TEST_CONFIG.repoPath)
 	})
 
 	interface LabelWithPriority {

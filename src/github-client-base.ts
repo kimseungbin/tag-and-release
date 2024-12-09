@@ -5,55 +5,32 @@ export abstract class GithubClientBase {
 	protected readonly repo: string
 	protected readonly octokit: Octokit
 
-	constructor(octokit: Octokit, owner: string, repo: string) {
+	constructor(octokit: Octokit, repoPath: string) {
 		if (!octokit) throw new Error('Octokit instance is required')
 		this.octokit = octokit
 
-		this.owner = this.validateOwner(owner)
-		this.repo = this.validateRepo(repo)
+		const [owner, repo] = this.validateRepoPath(repoPath)
+		this.owner = owner
+		this.repo = repo
 	}
 
 	/**
-	 * Validates the provided owner name according to GitHub username rules.
-	 * The owner name must be between 1-39 characters, start with a letter or number,
-	 * and can contain hyphens.
+	 * Validates the provided repository path, ensuring it follows the format "owner/repo".
+	 * The owner and repository names must be between 1-39 characters long, start with a letter or number,
+	 * and may contain hyphens. If the path is valid, it parses and returns the owner and repository names.
 	 *
-	 * @param {string} owner - The owner name to be validated.
-	 * @return {string} The trimmed and validated owner name.
-	 * @throws {Error} If the owner name is invalid according to GitHub username rules.
+	 * @param repoPath The repository path to validate, expected in the format "owner/repo".
+	 * @return A tuple containing the owner and repository names if the path is valid.
+	 * @throws An error if the repository path does not meet the specified criteria.
 	 */
-	private validateOwner(owner: string): string {
-		const trimmed = owner?.trim()
-		const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i
-		if (!trimmed || !regex.test(trimmed)) {
+	private validateRepoPath(repoPath: string): [owner: string, repo: string] {
+		const combinedRegex = /^([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})\/([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,100})$/i
+		if (!combinedRegex.test(repoPath)) {
 			throw new Error(
-				'Invalid owner name. GitHub username must be between 1-39 characters, start with a letter/number, and can contain hyphens.',
+				'Invalid repository path. Repository path must be in the format "owner/repo". Owner and repo names must be between 1-39 characters, start with a letter/number, and can contain hyphens.',
 			)
 		}
-		return trimmed
-	}
-
-	/**
-	 * Validates the given repository name according to specific naming rules.
-	 *
-	 * Repository names must:
-	 * - Be between 1 and 100 characters in length.
-	 * - Start with a letter or number.
-	 * - Contain only letters, numbers, or hyphens.
-	 * - Not end or begin with a hyphen, nor have consecutive hyphens.
-	 *
-	 * @param repo The repository name to validate.
-	 * @return The trimmed, validated repository name.
-	 * @throws Error if the repository name does not conform to the specified rules.
-	 */
-	private validateRepo(repo: string): string {
-		const trimmed = repo?.trim()
-		const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,100}$/i
-		if (!trimmed || !regex.test(trimmed)) {
-			throw new Error(
-				'Invalid repository name. Repository names must be between 1-100 characters, start with a letter/number, and can contain hyphens.',
-			)
-		}
-		return trimmed
+		const [owner, repo] = repoPath.split('/')
+		return [owner, repo]
 	}
 }

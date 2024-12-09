@@ -35,7 +35,7 @@ export async function run(): Promise<void> {
 	}
 
 	try {
-		const labelChecker = new LabelChecker(octokit, owner, repo)
+		const labelChecker = new LabelChecker(octokit, repoPath)
 		await labelChecker.ensureLabelsExist()
 	} catch (error) {
 		if (error instanceof RequestError) {
@@ -48,7 +48,7 @@ export async function run(): Promise<void> {
 
 	try {
 		// todo Get PR number dynamically
-		const labelSyncer = new LabelSyncer(octokit, owner, repo, 1)
+		const labelSyncer = new LabelSyncer(octokit, repoPath, 1)
 		await labelSyncer.syncLabels()
 	} catch (error) {
 		if (error instanceof Error) setFailed(error.message)
