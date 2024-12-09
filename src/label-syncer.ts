@@ -1,11 +1,11 @@
 import { BumpType, HexColor, Label } from './label-config'
 import { Octokit } from '@octokit/rest'
-import { GithubClientBase } from './github-client-base'
+import { GithubClientBase, RepositoryPath } from './github-client-base'
 
 export class LabelSyncer extends GithubClientBase {
 	private readonly pull: number
 
-	constructor(octokit: Octokit, repoPath: string, pull: number) {
+	constructor(octokit: Octokit, repoPath: RepositoryPath, pull: number) {
 		super(octokit, repoPath)
 
 		this.pull = this.validatePullNumber(pull)
