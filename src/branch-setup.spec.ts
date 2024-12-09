@@ -6,14 +6,10 @@ let branchSetup: BranchSetup
 let octokit: Octokit
 
 interface TestConfig {
-	readonly owner: string
-	readonly repo: string
 	readonly repoPath: string
 }
 
 const TEST_CONFIG: TestConfig = {
-	owner: 'kimseungbin',
-	repo: 'tag-and-release',
 	repoPath: 'kimseungbin/tag-and-release',
 }
 vi.mock('@octokit/rest', () => ({
@@ -44,7 +40,7 @@ describe('Branch Setup', () => {
 			const result = await branchSetup.verifyBranches()
 			expect(result).toBe(true)
 		})
-		it.todo('should return false if one or more required branch')
+		it.todo('should return false if one or more required branch are missing')
 	})
 	it.todo('should comment on PR with branch creation instructions when required branches are missing')
 	it.todo('should create branches when PR comment contains "/create-branches" command')
