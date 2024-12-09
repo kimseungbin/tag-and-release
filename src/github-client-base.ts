@@ -5,7 +5,7 @@ export abstract class GithubClientBase {
 	protected readonly repo: string
 	protected readonly octokit: Octokit
 
-	constructor(octokit: Octokit, repoPath: string) {
+	protected constructor(octokit: Octokit, repoPath: string) {
 		if (!octokit) throw new Error('Octokit instance is required')
 		this.octokit = octokit
 
