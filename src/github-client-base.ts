@@ -8,7 +8,7 @@ export abstract class GithubClientBase {
 	protected readonly octokit: Octokit
 
 	protected constructor(octokit: Octokit, repoPath: RepositoryPath) {
-		if (!octokit) throw new Error('Octokit instance is required')
+		if (!octokit) throw new Error('Octokit instance is required but was not provided.')
 		this.octokit = octokit
 
 		const [owner, repo] = this.validateRepoPath(repoPath)
@@ -33,6 +33,7 @@ export abstract class GithubClientBase {
 			)
 		}
 		const [owner, repo] = repoPath.split('/')
+
 		return [owner, repo]
 	}
 }
