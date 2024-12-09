@@ -12,17 +12,21 @@ interface TestConfig {
 const TEST_CONFIG: TestConfig = {
 	repoPath: 'kimseungbin/tag-and-release',
 }
+const mockListBranches = vi.fn()
+
 vi.mock('@octokit/rest', () => ({
 	Octokit: vi.fn().mockImplementation(() => ({
 		repos: {
-			listBranches: vi
-				.fn()
-				.mockResolvedValue({ data: [{ name: 'main' }, { name: 'stage' }, { name: 'release' }] }),
+			listBranches: mockListBranches,
 		},
 	})),
 }))
 
 beforeEach(() => {
+	mockListBranches.mockResolvedValue({
+		data: [{ name: 'main' }, { name: 'stage' }, { name: 'release' }],
+	})
+
 	octokit = new Octokit()
 
 	branchSetup = new BranchSetup(octokit, TEST_CONFIG.repoPath)
