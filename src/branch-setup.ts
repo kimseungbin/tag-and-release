@@ -36,17 +36,23 @@ export class BranchSetup extends GithubClientBase {
 	}
 
 	/**
-	 * Retrieves the list of branch names from a specified repository.
+	 * Retrieves the list of branch names for a specified repository using the GitHub API.
 	 *
-	 * @return {Promise<string[]>} A promise that resolves to an array containing the names of all branches in the repository.
+	 * @return {Promise<string[]>} A promise that resolves to an array of branch names.
+	 * @throws {Error} Will throw an error if the branch list cannot be retrieved.
 	 */
 	public async getBranches(): Promise<string[]> {
-		const response = await this.octokit.repos.listBranches({
-			owner: this.owner,
-			repo: this.repo,
-		})
+		try {
+			const response = await this.octokit.repos.listBranches({
+				owner: this.owner,
+				repo: this.repo,
+			})
 
-		return response.data.map((branch) => branch.name)
+			return response.data.map((branch) => branch.name)
+		} catch (error) {
+			console.error('Failed to retrieve branch list', error)
+			throw new Error('Failed to retrieve branch list')
+		}
 	}
 
 	public async verifyBranches(): Promise<boolean> {
