@@ -1,4 +1,3 @@
-import { Octokit } from '@octokit/rest'
 import { GithubClientBase } from './github-client-base'
 
 export interface BranchConfig {
@@ -34,10 +33,6 @@ export class BranchSetup extends GithubClientBase {
 			name: 'release',
 			isUsed: true,
 		},
-	}
-
-	constructor(octokit: Octokit, repoPath: string) {
-		super(octokit, repoPath)
 	}
 
 	/**
