@@ -81,6 +81,7 @@ export class LabelSyncer extends GithubClientBase {
 	}
 
 	private extractLinkedIssues(body: string): number[] {
+		console.log('body', body)
 		if (!body?.trim()) return []
 
 		const closingKeywords = ['close', 'closes', 'fix', 'fixes', 'fixed', 'resolve', 'resolves', 'resolved']
