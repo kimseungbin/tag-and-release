@@ -43,7 +43,8 @@ describe('Branch Setup', () => {
 	describe('verifyBranches', () => {
 		it('should verify existence of all required branches', async () => {
 			const result = await branchSetup.verifyBranches()
-			expect(result).toBe(true)
+			expect(result.success).toBe(true)
+			expect(result.missingBranches?.length).toBeFalsy()
 		})
 		it.todo('should return false if one or more required branch are missing', async () => {
 			mockListBranches.mockResolvedValue({
@@ -51,7 +52,8 @@ describe('Branch Setup', () => {
 			})
 
 			const result = await branchSetup.verifyBranches()
-			expect(result).toBe(false)
+			expect(result.success).toBe(false)
+			expect(result.missingBranches?.length).toBe(1)
 		})
 	})
 	it.todo('should comment on PR with branch creation instructions when required branches are missing')
