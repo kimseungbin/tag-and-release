@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest'
 import { GithubClientBase } from './github-client-base'
 
-export interface BRANCH_CONFIG {
+export interface BranchConfig {
 	development: {
 		name?: string
 		isUsed: boolean
@@ -21,7 +21,7 @@ export interface BRANCH_CONFIG {
  * @class BranchSetup
  */
 export class BranchSetup extends GithubClientBase {
-	private readonly branchConfig: BRANCH_CONFIG = {
+	private readonly branchConfig: BranchConfig = {
 		development: {
 			name: 'main',
 			isUsed: true,
@@ -58,7 +58,7 @@ export class BranchSetup extends GithubClientBase {
 		const branches = await this.getBranches()
 
 		return Object.keys(this.branchConfig).every((key) => {
-			const branchDetails = this.branchConfig[key as keyof BRANCH_CONFIG]
+			const branchDetails = this.branchConfig[key as keyof BranchConfig]
 			if (branchDetails.isUsed) {
 				return branches.includes(branchDetails.name || '')
 			}
