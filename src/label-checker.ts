@@ -14,8 +14,8 @@ export class LabelChecker extends GithubClientBase {
 		}
 	})()
 
-	constructor(octokit: Octokit, owner: string, repo: string) {
-		super(octokit, owner, repo)
+	constructor(octokit: Octokit, repoPath: string) {
+		super(octokit, repoPath)
 	}
 
 	static getLabelConfig(

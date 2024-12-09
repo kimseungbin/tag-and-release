@@ -8,11 +8,13 @@ let octokit: Octokit
 interface TestConfig {
 	readonly owner: string
 	readonly repo: string
+	readonly repoPath: string
 }
 
 const TEST_CONFIG: TestConfig = {
 	owner: 'kimseungbin',
 	repo: 'tag-and-release',
+	repoPath: 'kimseungbin/tag-and-release',
 }
 vi.mock('@octokit/rest', () => ({
 	Octokit: vi.fn().mockImplementation(() => ({
@@ -27,7 +29,7 @@ vi.mock('@octokit/rest', () => ({
 beforeEach(() => {
 	octokit = new Octokit()
 
-	branchSetup = new BranchSetup(octokit, TEST_CONFIG.owner, TEST_CONFIG.repo)
+	branchSetup = new BranchSetup(octokit, TEST_CONFIG.repoPath)
 })
 
 describe('Branch Setup', () => {

@@ -5,8 +5,8 @@ import { GithubClientBase } from './github-client-base'
 export class LabelSyncer extends GithubClientBase {
 	private readonly pull: number
 
-	constructor(octokit: Octokit, owner: string, repo: string, pull: number) {
-		super(octokit, owner, repo)
+	constructor(octokit: Octokit, repoPath: string, pull: number) {
+		super(octokit, repoPath)
 
 		this.pull = this.validatePullNumber(pull)
 	}
