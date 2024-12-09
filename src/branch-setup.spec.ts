@@ -42,7 +42,7 @@ describe('Branch Setup', () => {
 	describe('verifyBranches', () => {
 		it('should verify existence of all required branches', async () => {
 			const result = await branchSetup.verifyBranches()
-			expect(result).toBeTruthy()
+			expect(result).toBe(true)
 		})
 		it.todo('should return false if one or more required branch')
 	})
