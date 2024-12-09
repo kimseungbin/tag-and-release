@@ -91,9 +91,9 @@ gitGraph
     merge stage id: "Production Release" tag: "v0.1.1"
     checkout main
     branch breaking/3 order: 5
-    commit id: "some"
-    commit id: "breaking"
-    commit id: "changes"
+   commit id: "refactor: change API response format"
+   commit id: "feat: implement new authentication system"
+   commit id: "docs: update API documentation"
     checkout main
     merge breaking/3 tag: "v1.0.0-dev"
     checkout stage
