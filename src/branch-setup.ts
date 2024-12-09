@@ -1,6 +1,9 @@
 import { GithubClientBase, RepositoryPath } from './github-client-base'
 import { Octokit } from '@octokit/rest'
 
+/**
+ * Configuration for repository branch management.
+ */
 export interface BranchConfig {
 	development: {
 		name?: string
@@ -59,15 +62,25 @@ export class BranchSetup extends GithubClientBase {
 		}
 	}
 
-	public async verifyBranches(): Promise<boolean> {
-		const branches = await this.getBranches()
+	public async verifyBranches(): Promise<{ success: boolean; missingBranches?: string[] }> {
+		try {
+			const branches = await this.getBranches()
+			const missingBranches: string[] = []
 
-		return Object.keys(this.branchConfig).every((key) => {
-			const branchDetails = this.branchConfig[key as keyof BranchConfig]
-			if (branchDetails.isUsed) {
-				return branches.includes(branchDetails.name || '')
+			Object.keys(this.branchConfig).forEach((key) => {
+				const branchDetails = this.branchConfig[key as keyof BranchConfig]
+				if (branchDetails.isUsed && branchDetails.name) {
+					if (!branches.includes(branchDetails.name)) {
+						missingBranches.push(branchDetails.name)
+					}
+				}
+			})
+			return {
+				success: missingBranches.length === 0,
+				missingBranches,
 			}
-			return true
-		})
+		} catch (error) {
+			throw new Error(`Failed to verify branches:`, { cause: error })
+		}
 	}
 }
