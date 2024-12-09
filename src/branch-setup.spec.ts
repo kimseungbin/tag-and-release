@@ -45,7 +45,14 @@ describe('Branch Setup', () => {
 			const result = await branchSetup.verifyBranches()
 			expect(result).toBe(true)
 		})
-		it.todo('should return false if one or more required branch are missing')
+		it.todo('should return false if one or more required branch are missing', async () => {
+			mockListBranches.mockResolvedValue({
+				data: [{ name: 'main' }, { name: 'stage' }],
+			})
+
+			const result = await branchSetup.verifyBranches()
+			expect(result).toBe(false)
+		})
 	})
 	it.todo('should comment on PR with branch creation instructions when required branches are missing')
 	it.todo('should create branches when PR comment contains "/create-branches" command')
