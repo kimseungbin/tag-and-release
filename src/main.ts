@@ -50,7 +50,7 @@ export async function run(): Promise<void> {
 
 	try {
 		// todo Get PR number dynamically
-		console.log('GitHub Ref Name:', process.env.GITHUB_REF_NAME)
+		console.log('PR Number:', process.env.PR_NUMBER)
 		const labelSyncer = new LabelSyncer(octokit, repoPath, 1)
 		await labelSyncer.syncLabels()
 	} catch (error) {
