@@ -63,7 +63,6 @@ gitGraph
     branch stage order: 1
     checkout stage
     branch release order: 2
-    checkout main
     branch feat/1 order: 3
     checkout feat/1
     commit id: "test"
@@ -73,6 +72,8 @@ gitGraph
     merge feat/1 tag: "v0.1.0-dev"
     checkout stage
     merge main tag: "v0.1.0-rc"
+   checkout release
+   merge stage tag: "v0.1.0"
     checkout main
     branch hotfix/2 order: 4
     checkout hotfix/2
