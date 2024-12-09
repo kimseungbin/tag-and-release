@@ -135,6 +135,14 @@ gitGraph
     - Changes from `main` are merged into `stage` with a tag `v1.0.0-rc`.
     - Finally, the `stage` branch is merged into `release` and tagged as `v1.0.0`.
 
+### Version Bumping Rules
+
+The following rules determine version number changes:
+
+- **Major Version** (vX.0.0): Bumped when introducing breaking changes that may affect backward compatibility.
+- **Minor Version** (v0.X.0): Bumped when adding new features while maintaining backward compatibility.
+- **Patch Version** (v0.0.X): Bumped when bug fixes and patches.
+
 # Tools used
 
 ## Vite
