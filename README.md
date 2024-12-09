@@ -39,6 +39,7 @@ The label checker runs automatically when tag-and-release action is run.
 ## Branch Setup
 
 This workflow configures the necessary branches for managing releases effectively.
+These branches correspond to different deployment environments in the release pipeline.
 
 ### Default Branch Configuration
 
