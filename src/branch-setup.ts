@@ -1,4 +1,5 @@
-import { GithubClientBase } from './github-client-base'
+import { GithubClientBase, RepositoryPath } from './github-client-base'
+import { Octokit } from '@octokit/rest'
 
 export interface BranchConfig {
 	development: {
@@ -20,6 +21,9 @@ export interface BranchConfig {
  * @class BranchSetup
  */
 export class BranchSetup extends GithubClientBase {
+	constructor(octokit: Octokit, repoPath: RepositoryPath) {
+		super(octokit, repoPath)
+	}
 	private readonly branchConfig: BranchConfig = {
 		development: {
 			name: 'main',

@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { BranchSetup } from './branch-setup'
 import { Octokit } from '@octokit/rest'
+import { RepositoryPath } from './github-client-base'
 
 let branchSetup: BranchSetup
 let octokit: Octokit
 
 interface TestConfig {
-	readonly repoPath: string
+	readonly repoPath: RepositoryPath
 }
 
 const TEST_CONFIG: TestConfig = {
