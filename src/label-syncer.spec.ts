@@ -8,6 +8,20 @@ describe('LabelSyncer', () => {
 	const repoPath = 'owner/repo'
 	const pullNumber = 1
 
+	// Common mock responses
+	const mockResponses = {
+		linkedIssues: {
+			single: { body: '- Close #1' },
+			multiple: { body: '- Close#1 - Close #2' },
+			none: { body: '#3' },
+		},
+		labels: {
+			major: [{ name: 'major', color: '' }],
+			minor: [{ name: 'minor', color: '' }],
+			none: [],
+		},
+	}
+
 	beforeEach(() => {
 		octokit = new Octokit()
 		labelSyncer = new LabelSyncer(octokit, repoPath, pullNumber)
