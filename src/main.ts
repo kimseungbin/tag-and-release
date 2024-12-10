@@ -4,6 +4,7 @@ import { LabelChecker } from './label-checker'
 import { RequestError } from '@octokit/request-error'
 import { LabelSyncer } from './label-syncer'
 import { RepositoryPath } from './github-client-base'
+import { context } from '@actions/github'
 
 /**
  * Executes the main logic of the application.
@@ -48,11 +49,42 @@ export async function run(): Promise<void> {
 		else setFailed('An unknown error occurred during label checking.')
 	}
 
+	if (!context.payload.ref) {
+		setFailed('Ref is missing in the event payload.')
+		return
+	}
+	let prNumber: number
 	try {
-		// todo Get PR number dynamically
-		console.log('PR Number:', process.env.PR_NUMBER)
-		console.log(Object.keys(process.env))
-		const labelSyncer = new LabelSyncer(octokit, repoPath, 1)
+		const res = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
+			owner,
+			repo,
+			commit_sha: context.sha,
+		})
+		const matchingPRs = res.data
+			.filter(({ state }) => state === 'open')
+			.filter(({ head: { ref } }) => {
+				return context.payload.ref === `refs/heads/${ref}`
+			})
+
+		if (matchingPRs.length === 0) {
+			setFailed('No open pull request found for the latest commit')
+			return
+		} else if (matchingPRs.length > 1) {
+			setFailed(
+				`Multiple open pull requests found for the latest commit: ${matchingPRs.map(({ number }) => number).join(', ')}`,
+			)
+			return
+			// todo comment PR to manually handle it.
+		}
+
+		prNumber = matchingPRs[0].number
+	} catch (error) {
+		setFailed('Failed to retrieve PR list related to the latest commit')
+		return
+	}
+
+	try {
+		const labelSyncer = new LabelSyncer(octokit, repoPath, prNumber)
 		await labelSyncer.syncLabels()
 	} catch (error) {
 		if (error instanceof Error) setFailed(error.message)
