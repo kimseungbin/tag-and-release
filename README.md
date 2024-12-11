@@ -61,49 +61,51 @@ title: Example Git Diagram
 ---
 gitGraph
 %% Initialize repository
-    commit id: "Init" tag: "v0.0.0"
+   commit id: "Init" tag: "v0.0.0"
 %% Create environment branches
-    branch stage order: 1
-    checkout stage
-    branch release order: 2
-    branch feat/1 order: 3
+   branch stage order: 1
+   commit id: "Init stage"
+   branch release order: 2
+   commit id: "Init release"
+   checkout main
+   branch feat/1 order: 3
 %% Create a feature branch
-    checkout feat/1
+   checkout feat/1
    commit id: "test: add unit tests for feature 1"
    commit id: "feat: implement feature 1 core functionality"
    commit id: "refactor: optimize feature 1 implementation"
-    checkout main
-    merge feat/1 tag: "v0.1.0-dev"
-    checkout stage
-    merge main tag: "v0.1.0-rc"
+   checkout main
+   merge feat/1 tag: "v0.1.0-alpha"
+   checkout stage
+   merge main tag: "v0.1.0-rc"
    checkout release
    merge stage tag: "v0.1.0"
-    checkout main
-    branch hotfix/2 order: 4
-    checkout hotfix/2
-    commit id: "hotfix1"
-    commit id: "hotfix2"
-    checkout main
-    merge hotfix/2 tag: "v0.1.1-dev"
-    checkout stage
-    merge main tag: "v0.1.1-rc"
-    checkout release
-    merge stage id: "Production Release" tag: "v0.1.1"
-    checkout main
-    branch breaking/3 order: 5
+   checkout main
+   branch hotfix/2 order: 4
+   checkout hotfix/2
+   commit id: "hotfix1"
+   commit id: "hotfix2"
+   checkout main
+   merge hotfix/2 tag: "v0.1.1-dev"
+   checkout stage
+   merge main tag: "v0.1.1-rc"
+   checkout release
+   merge stage id: "Production Release" tag: "v0.1.1"
+   checkout main
+   branch breaking/3 order: 5
    commit id: "refactor: change API response format"
    commit id: "feat: implement new authentication system"
    commit id: "docs: update API documentation"
-    checkout main
-    merge breaking/3 tag: "v1.0.0-dev"
-    checkout stage
-    merge main tag: "v1.0.0-rc"
-    checkout release
-    merge stage tag: "v1.0.0"
-    checkout main
-    commit
-    commit
-    commit
+   checkout main
+   merge breaking/3 tag: "v1.0.0-dev"
+   checkout stage
+   merge main tag: "v1.0.0-rc"
+   checkout release
+   merge stage tag: "v1.0.0"
+   checkout main
+   commit
+   commit
+   commit
 ```
 
 1. Initialization:
