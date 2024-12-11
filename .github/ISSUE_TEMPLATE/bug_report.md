@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Create a report to help improve the project
-title: 'Fix: [enter bug summary]'
+title: 'fix: [enter bug summary]'
 labels: bug, patch
 assignees: kimgseungbin
 
