@@ -45,7 +45,7 @@ These branches correspond to different deployment environments in the release pi
 
 | Branch Name | Environment | Version Example |
 |-------------|-------------|-----------------|
-| main        | Development | v1.0.0-dev      |
+| main        | Development | v1.0.0-alpha    |
 | stage       | Staging     | v1.0.0-rc       |
 | release     | Production  | v1.0.0          |
 
@@ -69,9 +69,9 @@ gitGraph
     branch feat/1 order: 3
 %% Create a feature branch
     checkout feat/1
-    commit id: "test"
-    commit id: "implement"
-    commit id: "refactor"
+   commit id: "test: add unit tests for feature 1"
+   commit id: "feat: implement feature 1 core functionality"
+   commit id: "refactor: optimize feature 1 implementation"
     checkout main
     merge feat/1 tag: "v0.1.0-dev"
     checkout stage
@@ -136,6 +136,8 @@ gitGraph
     - Finally, the `stage` branch is merged into `release` and tagged as `v1.0.0`.
 
 ### Version Bumping Rules
+
+cf. [Semantic Versioning 2.0.0](https://semver.org)
 
 The following rules determine version number changes:
 
