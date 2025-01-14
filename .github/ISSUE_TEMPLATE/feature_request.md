@@ -1,7 +1,7 @@
 ---
 name: Feature Request
 about: Suggest a new feature or improvement
-title: 'Feat: [enter feature summary]'
+title: 'feat: [enter feature summary]'
 labels: enhancement, minor
 assignees: kimseungbin  # or assign another default user
 

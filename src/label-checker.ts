@@ -1,40 +1,25 @@
-import { Octokit } from '@octokit/rest'
-
 import { labelConfigs } from './label-config'
 import { validateColorCode } from './color-utils'
+import { GithubClientBase, RepositoryPath } from './github-client-base'
+import { Octokit } from '@octokit/rest'
 
-export class LabelChecker {
-	private static readonly labels = (() => {
+export class LabelChecker extends GithubClientBase {
+	private static readonly labels = LabelChecker.initializeLabels()
+
+	constructor(octokit: Octokit, repoPath: RepositoryPath) {
+		super(octokit, repoPath)
+	}
+
+	private static initializeLabels() {
 		try {
 			LabelChecker.validateLabelConfigs(labelConfigs)
 			return labelConfigs
-		} catch (error: any) {
-			throw new Error(`Failed to initialize label configurations: ${error.message}`, { cause: error })
+		} catch (error) {
+			if (error instanceof Error) {
+				throw new Error(`Failed to initialize label configurations: ${error.message}`, { cause: error })
+			}
+			throw new Error(`Failed to initialize label configurations due to unknown error: ${error}`)
 		}
-	})()
-
-	private readonly owner: string
-	private readonly repo: string
-	private readonly octokit: Octokit
-
-	constructor(octokit: Octokit, owner: string, repo: string) {
-		const trimmedOwner = owner?.trim()
-		const trimmedRepo = repo?.trim()
-		if (!trimmedOwner || !/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(trimmedOwner)) {
-			throw new Error(
-				'Invalid owner name. GitHub username must be between 1-39 characters, start with a letter/number, and can contain hyphens.',
-			)
-		}
-		if (!trimmedRepo || !/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,100}$/i.test(trimmedRepo)) {
-			throw new Error(
-				'Invalid repository name. Repository names must be between 1-100 characters, start with a letter/number, and can contain hyphens.',
-			)
-		}
-		if (!octokit) throw new Error('Octokit instance is required')
-
-		this.owner = trimmedOwner
-		this.repo = trimmedRepo
-		this.octokit = octokit
 	}
 
 	static getLabelConfig(
@@ -90,15 +75,5 @@ export class LabelChecker {
 			console.error(error)
 			throw new Error('Failed to check labels')
 		}
-	}
-}
-
-class LabelCheckError extends Error {
-	constructor(
-		message: string,
-		public readonly cause?: unknown,
-	) {
-		super(message)
-		this.name = 'LabelCheckError'
 	}
 }
