@@ -18,6 +18,7 @@ import { context } from '@actions/github'
  * @throws {RequestError} If GitHub API calls fail (401, 403, etc.)
  */
 export async function run(): Promise<void> {
+	// Retrieve the repository path from the environment variable.
 	const repoPath = process.env.GITHUB_REPOSITORY as RepositoryPath | undefined
 	if (!repoPath) {
 		throw new Error(
@@ -25,10 +26,12 @@ export async function run(): Promise<void> {
 		)
 	}
 
+	// Split the repository path into owner and repo.
 	const [owner, repo] = repoPath.split('/')
 	if (!owner || !repo)
 		throw new Error('GITHUB_REPOSITORY is not in the expected format "owner/repo" (e.g. "foo/bar")')
 
+	// Create a GitHub client using the provided token.
 	let octokit: Octokit
 	try {
 		octokit = await createGitHubClient()
@@ -37,6 +40,7 @@ export async function run(): Promise<void> {
 		return
 	}
 
+	// Ensure all required labels exist in the repository.
 	try {
 		const labelChecker = new LabelChecker(octokit, repoPath)
 		await labelChecker.ensureLabelsExist()
@@ -49,10 +53,13 @@ export async function run(): Promise<void> {
 		else setFailed('An unknown error occurred during label checking.')
 	}
 
+	// Ensure the `ref` field exists in the GitHub event payload.
 	if (!context.payload.ref) {
 		setFailed('Ref is missing in the event payload.')
 		return
 	}
+
+	// List pull requests associated with the latest commit.
 	let prNumber: number
 	try {
 		const res = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
@@ -60,6 +67,8 @@ export async function run(): Promise<void> {
 			repo,
 			commit_sha: context.sha,
 		})
+
+		// Filter for open pull requests that match the current branch
 		const matchingPRs = res.data
 			.filter(({ state }) => state === 'open')
 			.filter(({ head: { ref } }) => {
@@ -83,6 +92,7 @@ export async function run(): Promise<void> {
 		return
 	}
 
+	// Sync labels for the identified pull request.
 	try {
 		const labelSyncer = new LabelSyncer(octokit, repoPath, prNumber)
 		await labelSyncer.syncLabels()
